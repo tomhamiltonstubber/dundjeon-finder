@@ -1,9 +1,13 @@
 <html>
   <head>
-    <!-- Chris smells -->
-  <link rel="stylesheet" href="{{ 'static/dist/main.bundle.css' }}" crossorigin="anonymous">
+      <!-- Chris smells -->
+    <link rel="stylesheet" href="{{ static('/dist/main.bundle.css') }}" crossorigin="anonymous">
   </head>
   <body>
-    {% block content %}{% endblock %}
+    {% if request.user.is_authenticated %}
+      I am authenticated
+    {% endif %}
+    {% block body %}{% endblock %}
+    <script src="{{ static('/dist/main.js') }}"></script>
   </body>
 </html>

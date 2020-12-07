@@ -56,7 +56,10 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'APP_DIRS': True,
         'DIRS': ['templates'],
-        'OPTIONS': {'context_processors': _TEMPLATE_CONTEXT_PROCESSORS},
+        'OPTIONS': {
+            'context_processors': _TEMPLATE_CONTEXT_PROCESSORS,
+            'environment': 'DungeonFinder.jinja2.environment',
+        },
     },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -92,6 +95,7 @@ else:
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
+LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'users.User'
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -115,7 +119,8 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-
+STATIC_ROOT = 'staticfiles'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_URL = '/static/'
 
 if sentry_dsn := os.getenv('SENTRY_DSN'):

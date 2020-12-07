@@ -2,9 +2,9 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const config = {
-  entry: ['/src/static/js/main.js', '/src/static/scss/main.scss'],
+  entry: ['/static/js/main.js', '/static/scss/main.scss'],
   output: {
-    path: path.resolve(__dirname, 'src/static/dist'),
+    path: path.resolve(__dirname, 'static/dist'),
     filename: 'main.bundle.js'
   },
   externals: {
