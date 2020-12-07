@@ -6,7 +6,7 @@ DJ_DIR = os.path.dirname(__file__)
 BASE_DIR = os.path.dirname(DJ_DIR)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('_me*v)q1427h=^8bc1i6jn%i@51=!h2zv#f8scnr%u_-(jqbik')
+SECRET_KEY = os.getenv('SECRET_KEY', '_me*v)q1427h=^8bc1i6jn%i@51=!h2zv#f8scnr%u_-(jqbik')
 
 DEBUG = os.getenv('DEBUG', True)
 LIVE = os.getenv('LIVE')
@@ -56,7 +56,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'APP_DIRS': True,
         'DIRS': ['templates'],
-        'OPTIONS': {'match_extension': '.jinja', 'context_processors': _TEMPLATE_CONTEXT_PROCESSORS},
+        'OPTIONS': {'context_processors': _TEMPLATE_CONTEXT_PROCESSORS},
     },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -92,6 +92,7 @@ else:
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
+AUTH_USER_MODEL = 'users.User'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -118,11 +119,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 if sentry_dsn := os.getenv('SENTRY_DSN'):
-    sentry_sdk.init(
-        dsn=sentry_dsn,
-        integrations=[DjangoIntegration()],
-        send_default_pii=True
-    )
+    sentry_sdk.init(dsn=sentry_dsn, integrations=[DjangoIntegration()], send_default_pii=True)
 
 
 # =======================
@@ -141,12 +138,11 @@ LOGGING = {
             'datefmt': '%d/%b/%Y %H:%M:%S',
         },
         'django.server': {'()': 'django.utils.log.ServerFormatter', 'format': '[%(server_time)s] %(message)s'},
-        'sentry': {'level': 'WARNING', 'class': 'raven.contrib.django.handlers.SentryHandler'},
     },
     'handlers': {
         'debug_console': {'level': 'DEBUG', 'filters': ['require_debug_true'], 'class': 'logging.StreamHandler'},
         'null': {'class': 'logging.NullHandler'},
-        'sentry': {'level': 'WARNING', 'class': 'raven.contrib.django.handlers.SentryHandler'},
+        'sentry': {'level': 'WARNING', 'class': 'sentry_sdk.integrations.logging.EventHandler'},
         'django.server': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'django.server'},
         'df': {
             'level': 'DEBUG' if DEBUG else 'INFO',
