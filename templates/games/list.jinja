@@ -1,0 +1,7 @@
+{% extends 'base.jinja' %}
+
+{% block content %}
+  {% for game in games %}
+    {{ game.name }}
+  {% endfor %}
+{% endblock %}
