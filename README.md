@@ -21,7 +21,7 @@ make install-dev
 To run the server for the first time run 
 
 ```shell
-python ./manage reset_database
+python ./manage.py reset_database
 ```
 
 This not only creates the database but will also give you demo data to muck around with.
