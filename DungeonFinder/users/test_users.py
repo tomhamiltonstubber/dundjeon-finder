@@ -1,6 +1,6 @@
-from django.test import TestCase, Client
 from datetime import datetime as dt
 
+from django.test import Client, TestCase
 from django.urls import reverse
 from pytz import utc
 
@@ -40,9 +40,3 @@ class UserAuthTestCase(TestCase):
         r = client.post(reverse('logout'), follow=True)
         self.assertNotContains(r, 'I am authenticated')
         self.assertRedirects(r, '/')
-
-    def test_unauthed_header_content(self):
-        pass
-
-    def test_authed_header_content(self):
-        pass

@@ -2,7 +2,7 @@ from django.core.management import BaseCommand, call_command
 from django.db import connection
 
 from DungeonFinder.games.models import Game
-from DungeonFinder.users.models import User, GameMaster
+from DungeonFinder.users.models import GameMaster, User
 
 
 class Command(BaseCommand):

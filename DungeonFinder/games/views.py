@@ -1,9 +1,9 @@
 from django.core.exceptions import SuspiciousOperation
-from django.db.models import F, Count
+from django.db.models import Count, F
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, ListView
 
 from DungeonFinder.games.forms import GamesFilterForm
 from DungeonFinder.games.models import Game

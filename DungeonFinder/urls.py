@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from DungeonFinder.games.views import index, games_list, games_list_data, game_details
+from DungeonFinder.games.views import game_details, games_list, games_list_data, index
 from DungeonFinder.users.views import login
 
 urlpatterns = [

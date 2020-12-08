@@ -1,7 +1,7 @@
 import factory
 from django.db import IntegrityError
 
-from DungeonFinder.users.models import User, GameMaster
+from DungeonFinder.users.models import GameMaster, User
 
 
 class UserFactory(factory.django.DjangoModelFactory):
