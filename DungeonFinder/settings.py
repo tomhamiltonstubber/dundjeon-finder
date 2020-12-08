@@ -6,7 +6,7 @@ DJ_DIR = os.path.dirname(__file__)
 BASE_DIR = os.path.dirname(DJ_DIR)
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', '_me*v)q1427h=^8bc1i6jn%i@51=!h2zv#f8scnr%u_-(jqbik')
+SECRET_KEY = os.getenv('SECRET_KEY', 'TEST_SECRET')
 
 DEBUG = os.getenv('DEBUG', True)
 LIVE = os.getenv('LIVE')
