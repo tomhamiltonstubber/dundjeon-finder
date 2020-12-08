@@ -6,4 +6,4 @@ class DFForm(forms.Form):
         self.request = request
         super().__init__(*args, **kwargs)
         for f in self.fields:
-            f.widget.attrs = {'class': 'dk-field'}
+            self.fields[f].widget.attrs = {'class': 'dk-field'}
