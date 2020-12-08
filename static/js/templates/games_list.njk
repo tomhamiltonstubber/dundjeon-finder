@@ -1,0 +1,7 @@
+{% macro game_renderer(game_data) %}
+  <li><a href="{{ game_data.link }}">{{ game_data.name }}</a>: {{ game_data.free_spaces }}</li>
+{% endmacro %}
+
+{% for game_data in games_data %}
+  {{ game_renderer(game_data) }}
+{% endfor %}

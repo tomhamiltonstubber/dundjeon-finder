@@ -1,7 +1,12 @@
 {% extends 'base.jinja' %}
 
 {% block content %}
-  {% for game in games %}
-    {{ game.name }}
-  {% endfor %}
+  <div id="games-filter-form">
+{#    Filter form is the filter_form object passed through the context to this template. Renders nicely#}
+    {{ filter_form.free_spaces }}
+    {{ filter_form.status }}
+  </div>
+  <div id="games-list" data-games-data="{{ url('games-data') }}">
+{#    Perhaps have a spinner here or loading icon?#}
+  </div>
 {% endblock %}

@@ -6,10 +6,13 @@
   "author": "Tom Hamilton Stubber <tomhamiltonstubber@gmail.com>",
   "dependencies": {
     "autoprefixer": "^10.0.2",
-    "babel-loader": "^8.2.1",
+    "babel-loader": "^8.2.2",
     "css-loader": "^5.0.1",
     "file-loader": "^6.2.0",
+    "jquery": "^3.5.1",
     "mini-css-extract-plugin": "^1.3.1",
+    "nunjucks": "^3.2.2",
+    "nunjucks-loader": "^3.0.0",
     "path": "^0.12.7",
     "postcss": "^8.1.9",
     "postcss-loader": "^4.1.0",
@@ -26,6 +29,8 @@
     "main-watch": "yarn run main --watch --output-filename [name].js"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.12.7",
     "babel-eslint": "10.0.3",
     "bfj-node4": "^5.3.1",
     "eslint": "^6.8.0",

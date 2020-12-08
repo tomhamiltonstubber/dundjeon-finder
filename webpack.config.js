@@ -2,7 +2,10 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const config = {
-  entry: ['/static/js/main.js', '/static/scss/main.scss'],
+  entry: [
+    '/static/js/main.js',
+    '/static/scss/main.scss'
+  ],
   output: {
     path: path.resolve(__dirname, 'static/dist'),
     filename: 'main.bundle.js'
@@ -18,6 +21,11 @@ const config = {
   ],
   module: {
     rules: [
+      {
+        test: /\.(js)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader']
+      },
       {
         test: /\.s[ac]ss$/i,
         exclude: /node_modules/,
@@ -35,6 +43,10 @@ const config = {
           {loader: 'css-loader', options: {importLoaders: 1}},
           {loader: 'postcss-loader'}
         ]
+      },
+      {
+        test: /\.njk/,
+        use: {loader: 'nunjucks-loader'}
       }
     ]
   }

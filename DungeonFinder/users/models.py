@@ -16,11 +16,11 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_user(self, email, password=None, is_admin=False, **extra_fields):
-        return self._create_user(email, password, is_admin=is_admin, **extra_fields)
+    def create_user(self, email, password=None, **extra_fields):
+        return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
-        return super().create_superuser(email, password, is_admin=True, **extra_fields)
+        return self._create_user(email, password, is_admin=True, **extra_fields)
 
 
 class User(AbstractUser):
@@ -46,7 +46,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return f'{self.username}'
+        return f'{self.screen_name}'
 
     class Meta:
         verbose_name = 'User'

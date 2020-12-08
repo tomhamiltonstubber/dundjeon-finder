@@ -23,9 +23,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'DungeonFinder.staticfiles',
     'django.contrib.staticfiles',
     'DungeonFinder.games',
     'DungeonFinder.users',
+    'DungeonFinder.common',
 ]
 
 MIDDLEWARE = [
