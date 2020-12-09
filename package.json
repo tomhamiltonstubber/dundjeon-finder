@@ -26,8 +26,7 @@
   },
   "scripts": {
     "main": "webpack --config webpack.config.js",
-    "main-watch": "yarn run main --watch --output-filename [name].js",
-    "lint": "eslint static/js"
+    "main-watch": "yarn run main --watch --output-filename [name].js"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

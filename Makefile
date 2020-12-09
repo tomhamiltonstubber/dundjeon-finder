@@ -21,7 +21,6 @@ format:
 
 .PHONY: lint
 lint:
-	yarn run lint
 	flake8 DungeonFinder
 	isort --check-only DungeonFinder
 	$(black) --check DungeonFinder
