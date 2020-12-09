@@ -1,7 +1,8 @@
 from django.db import models
+from django.urls import reverse
 
 
-class Game(models.Model):
+class Campaign(models.Model):
     STATUS_PENDING = 'pending'
     STATUS_COLD = 'cold'
     STATUS_IN_PROGRESS = 'in-progress'
@@ -13,14 +14,48 @@ class Game(models.Model):
         (STATUS_IN_PROGRESS, 'In progress'),
         (STATUS_FINISHED, 'Finished'),
     )
+    TYPE_HOMEBREW = 'homebrew'
+    TYPE_MODULAR = 'modular'
+    TYPE_SOURCE_BOOK = 'source-book'
+    TYPE_CHOICES = (
+        (TYPE_HOMEBREW, 'Homebrew'),
+        (TYPE_MODULAR, 'Modular'),
+        (TYPE_SOURCE_BOOK, 'Campaign Source Book'),
+    )
+    RP_ANY = 'any'
+    RP_HEAVY = 'heavy'
+    RP_LIGHT = 'light'
+    RP_CHOICES = ((RP_ANY, 'Any'), (RP_LIGHT, 'light'), (RP_HEAVY, 'heavy'))
 
     name = models.CharField(max_length=255)
-    description = models.TextField(null=True, blank=True)
+
+    accepting_players = models.BooleanField(default=True)
+    beginners_welcome = models.BooleanField(default=True)
+    campaign_type = models.CharField(choices=TYPE_CHOICES, default=TYPE_HOMEBREW, max_length=20)
     created = models.DateTimeField(null=True, blank=True, auto_now_add=True)
     creator = models.ForeignKey('users.GameMaster', on_delete=models.CASCADE)
+    description = models.TextField(null=True, blank=True)
     players = models.ManyToManyField('users.User', related_name='games', blank=True)
-    status = models.CharField(choices=STATUS_CHOICES, max_length=20, default=STATUS_PENDING)
+    mature_content = models.BooleanField('Contains mature content', default=False)
     max_players = models.IntegerField()
+    next_game_dt = models.DateTimeField(null=True, blank=True)
+    price_per_session = models.DecimalField(
+        help_text='The price per player per session.', decimal_places=2, max_digits=4, null=True, blank=True
+    )
+    role_play_level = models.CharField(choices=RP_CHOICES, default=RP_ANY, max_length=20)
+    status = models.CharField(choices=STATUS_CHOICES, max_length=20, default=STATUS_PENDING)
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('campaign-details', kwargs={'pk': self.pk})
+
+    def get_list_data(self):
+        return {
+            'name': self.name,
+            'link': self.get_absolute_url(),
+            'free_spaces': self.free_spaces,  # This has been annotated onto the queryset
+            'description': self.description,
+            'price_per_session': self.price_per_session,
+        }

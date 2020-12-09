@@ -3,10 +3,9 @@
 {% block content %}
   <div id="games-filter-form">
 {#    Filter form is the filter_form object passed through the context to this template. Renders nicely#}
-    {{ filter_form.free_spaces }}
-    {{ filter_form.status }}
+    {{ filter_form.role_play_level }}
   </div>
-  <div id="games-list" data-games-data="{{ url('games-data') }}">
+  <div id="games-list" data-camps-data-url="{{ url('avail-campaigns-data') }}">
 {#    Perhaps have a spinner here or loading icon?#}
   </div>
 {% endblock %}

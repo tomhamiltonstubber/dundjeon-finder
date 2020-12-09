@@ -55,3 +55,7 @@ class User(AbstractUser):
 
 class GameMaster(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class GMReview(models.Model):
+    pass

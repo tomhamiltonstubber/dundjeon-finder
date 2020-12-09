@@ -17,12 +17,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='game',
+            model_name='campaign',
             name='creator',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.gamemaster'),
         ),
         migrations.AddField(
-            model_name='game',
+            model_name='campaign',
             name='players',
             field=models.ManyToManyField(blank=True, related_name='games', to=settings.AUTH_USER_MODEL),
         ),
