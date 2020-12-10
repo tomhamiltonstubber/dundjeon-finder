@@ -1,0 +1,119 @@
+<div class="flex flex-col form text-xs" id="games-filter-form">
+	<div>
+		<label for="free" class="mb-2 block">Free Games:</label>
+		<div class="filter-select">
+			<span>
+				<img src="/static/img/bank-card.svg">
+			</span>
+			 {{ filter_form.status }}
+		</div>
+	</div>
+	<div>
+		<label for="date" class="mb-2 block">Date of next game</label>
+		<div class="filter-select">
+			<span>
+				<img src="/static/img/calendar.svg">
+			</span>
+			{{ filter_form.status }}
+		</div>
+	</div>
+	<div>
+		<label for="rating" class="mb-2 block">DM Rating</label>
+		<div class="filter-select">
+			<span>
+				<img src="/static/img/star.svg">
+			</span>
+			{{ filter_form.status }}
+		</div>
+	</div>
+	<div>
+		<label for="started" class="mb-2 block">Sessions Played Already</label>
+		<div class="filter-select">
+			<span>
+				<img src="/static/img/book.svg">
+			</span>
+			{{ filter_form.status }}
+		</div>
+	</div>
+	<div>
+		<label for="module" class="mb-2 block">Adventure Module</label>
+		<div class="filter-select">
+			<span>
+				<img src="/static/img/book.svg">
+			</span>
+			{{ filter_form.status }}
+		</div>
+	</div>
+	<div>
+		<label for="level" class="mb-2 block">Starting level</label>
+		<div class="filter-select">
+			<span>
+				<img src="/static/img/dice.svg">
+			</span>
+			{{ filter_form.status }}
+		</div>
+	</div>
+	<div>
+		<button class="btn p-3 w-full font-cursive">
+			Search
+		</button>
+	</div>
+</div>
+
+<style>
+	.btn{
+		background-image: -webkit-linear-gradient(top, #ad121a, #78070c);
+	}
+	.form{
+		width: 220px;
+	}
+	.filter-select {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		background: #000;
+		border: 2px solid #424b61;
+		margin-bottom: 2em;
+		border-radius: 40px;
+		overflow: hidden;
+	}
+
+	.filter-select:first-of-type{
+		margin-left: 0;
+	}
+
+	.filter-select span {
+		pointer-events: none;
+		position: absolute;
+	    left: 1em;
+	    width: 1.5em;
+	    height: 1.5em;
+	    z-index: 1;
+	}
+
+	label{
+		font-weight: 600;
+		font-size: 1.2em;
+	}
+
+	.filter-select select {
+		background: transparent;
+		color: #fff;
+		appearance: none;
+		padding: 1em;
+		background-image: url(/static/img/dropdown.png);
+		background-size: 4em;
+		background-repeat: no-repeat;
+		padding-right: 8em;
+		background-position: 100%;
+		padding-left: 4em;
+		cursor: pointer;
+		width: 260px;
+		filter: grayscale(.6);
+	}
+
+	.filter-select select:hover{
+		filter: grayscale(0);
+	}
+</style>

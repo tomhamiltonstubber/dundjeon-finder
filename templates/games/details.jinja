@@ -1,11 +1,56 @@
 {% extends 'base.jinja' %}
 
 {% block content %}
-  <h1>{{ game.name }}</h1>
-  <p>{{ game.description }}</p>
-  <ul>
-    {% for player in game.players.all() %}
-      <li>{{ player }}</li>
-    {% endfor %}
-  </ul>
+<section class="pt-32 pb-10 text-white">
+	<div class="container mx-auto">
+		<div class="flex">
+		<div class="w-1/4">
+			{% include "/partials/profile_listing.jinja" %}
+		</div>
+		<div class="w-3/4 pl-10">
+			<h2 class="text-3xl mt-2 leading-tight font-heading">{{ game.name }}</h2>
+			<h3 class="text-2xl mt-2 leading-tight font-heading text-gray-500">4 Days until next game</h3>
+			<div class="w-1/3 relative hidden" style="margin-top:-65px;margin-bottom:-300px;">
+				<img src="https://images.twinkl.co.uk/tr/image/upload/illustation/Campfire.png">
+			</div>
+		</div>
+	</div>
+</div>
+</section>
+<div class="hidden">
+<section class="bg-gray-300 py-10">
+	<div class="container mx-auto text-center">
+		<div class="w-2/3 mx-auto text-xl leading-7">
+			<h2 class="text-2xl font-heading">The Story</h2>
+			{ game.description }}
+    </div>
+	</div>
+</section>
+<section class="py-10">
+	<div class="container mx-auto text-center">
+		<div class="w-2/3 mx-auto text-xl leading-7 text-white mb-10">
+			<h2 class="text-2xl font-heading">The Players</h2>
+		</div>
+		<div class="flex flex-wrap">
+			{% for player in game.players.all() %}
+				<div class="w-full mb-4 md:w-1/4 px-4">
+				 <li>{{ player }}</li>
+				</div>
+			{% endfor %}
+			<div class="w-1/4 px-4">
+				<a href="/profile" class="bg-gradient-to-t block border-2 border-gray-600 border-solid from-gray-800 p-10">
+					<div class="relative">
+					</div>
+					<div class="border-r-8 h-32 inline-block overflow-hidden rounded-full w-32">
+						<img src="https://vignette.wikia.nocookie.net/agros/images/8/8d/Pic_189.jpg/revision/latest?cb=20190803154113">
+					</div>
+					<div class="text-center py-5 text-white">
+						<h3 class="text-xl">Christopher David Sawyer</h3>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+</section>
+</div>
 {% endblock %}
