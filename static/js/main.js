@@ -15,7 +15,7 @@ const init_games_list = () => {
   if ($games_list.length) {
     const update_games_list = () => {
       const form_data = $filter_form.serialize()
-      $.get($games_list.data('games-data') + '?' + form_data)
+      $.get($games_list.data('camps-data-url') + '?' + form_data)
         .done(data => {
           const $games_list_html = games_list.render({games_data: data})
           $games_list.html($games_list_html).show()

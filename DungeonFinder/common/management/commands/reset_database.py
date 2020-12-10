@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand, call_command
 from django.db import connection
 
-from DungeonFinder.games.models import Game
+from DungeonFinder.games.models import Campaign
 from DungeonFinder.users.models import GameMaster, User
 
 
@@ -58,17 +58,17 @@ class Command(BaseCommand):
             email='admin@example.com',
         )
 
-        game1 = Game.objects.create(
+        game1 = Campaign.objects.create(
             name='Mines of Phandelver', description='A finished first game', creator=gm, max_players=4
         )
         game1.players.add(p1)
         game1.players.add(p2)
         game1.players.add(p3)
-        game2 = Game.objects.create(
+        game2 = Campaign.objects.create(
             name='Into the Abyss', description='A current ongoing game', creator=gm, max_players=3
         )
         game2.players.add(p2, p3)
-        game3 = Game.objects.create(name='Curse of Strahd', description='A future game', creator=gm, max_players=5)
+        game3 = Campaign.objects.create(name='Curse of Strahd', description='A future game', creator=gm, max_players=5)
         game3.players.add(p3)
         print(
             '\n    Created 3 players, 1 GM and 3 games.\n '

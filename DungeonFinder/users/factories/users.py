@@ -10,7 +10,8 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     password = 'testing'
     first_name = 'Hystera'
-    last_name = factory.Sequence(lambda n: 'Died %d' % n)
+    last_name = factory.Sequence(lambda n: f'Died {n}')
+    screen_name = factory.Sequence(lambda n: f'hystera_died_{n}')
 
     @factory.LazyAttribute
     def email(self):

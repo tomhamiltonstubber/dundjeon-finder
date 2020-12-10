@@ -1,12 +1,12 @@
 import factory
 
-from DungeonFinder.games.models import Game
+from DungeonFinder.games.models import Campaign
 from DungeonFinder.users.factories.users import GameMasterFactory
 
 
-class GameFactory(factory.django.DjangoModelFactory):
+class CampaignFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = Game
+        model = Campaign
 
     name = factory.Sequence(lambda n: f'Game {n}')
     description = 'The best game in the world'
