@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from pytz import utc
 
+from DungeonFinder.common.test_helpers import AuthenticatedClient
 from DungeonFinder.games.factories.games import CampaignFactory
 from DungeonFinder.games.models import Campaign
 from DungeonFinder.users.factories.users import UserFactory
@@ -131,3 +132,110 @@ class CampsListTestCase(TestCase):
         r = self.client.get(self.avail_data_url, {'exclude_mature_content': True})
         self.assertNotContains(r, 'Camp1')
         self.assertContains(r, 'Camp2')
+
+
+class CampEditTestCase(TestCase):
+    def setUp(self):
+        self.player_client = AuthenticatedClient(is_gm=False)
+        self.gm_client = AuthenticatedClient()
+
+    def test_add_camp_not_gm(self):
+        r = self.client.get(reverse('campaign-create'))
+        self.assertRedirects(r, reverse('avail-campaign-list'))
+        r = self.player_client.get(reverse('campaign-create'))
+        self.assertRedirects(r, reverse('avail-campaign-list'))
+
+    def test_add_camp(self):
+        r = self.gm_client.get(reverse('campaign-create'))
+        self.assertContains(r, 'Accepting players')
+        data = {
+            'name': 'A new campaign',
+            'accepting_players': True,
+            'beginners_welcome': True,
+            'campaign_type': Campaign.TYPE_MODULAR,
+            'description': 'A new new campaign',
+            'mature_content': True,
+            'max_players': 2,
+            'next_game_dt': datetime.datetime(2020, 10, 1, 9).strftime('%Y-%m-%dT%H:%M'),
+            'price_per_session': '3.45',
+            'role_play_level': Campaign.RP_HEAVY,
+        }
+        r = self.gm_client.post(reverse('campaign-create'), data)
+        camp = Campaign.objects.get()
+        self.assertRedirects(r, camp.get_absolute_url())
+        assert camp.name == 'A new campaign'
+        assert camp.accepting_players
+        assert camp.beginners_welcome
+        assert camp.campaign_type == Campaign.TYPE_MODULAR
+        assert camp.description == 'A new new campaign'
+        assert camp.max_players == 2
+        assert camp.mature_content
+        assert camp.status == Campaign.STATUS_PENDING
+        assert camp.next_game_dt == datetime.datetime(2020, 10, 1, 9, tzinfo=utc)
+        assert camp.price_per_session == Decimal('3.45')
+        assert camp.role_play_level == Campaign.RP_HEAVY
+
+    def test_edit_camp(self):
+        gm = self.gm_client.user.gamemaster
+        camp = CampaignFactory(creator=gm, name='FooBar')
+        r = self.gm_client.get(reverse('campaign-edit', args=[camp.pk]))
+        self.assertContains(r, 'FooBar')
+        r = self.gm_client.post(
+            reverse('campaign-edit', args=[camp.pk]),
+            data={
+                'name': 'A new campaign',
+                'accepting_players': True,
+                'beginners_welcome': True,
+                'campaign_type': Campaign.TYPE_MODULAR,
+                'description': 'A new new campaign',
+                'mature_content': True,
+                'max_players': 2,
+                'next_game_dt': datetime.datetime(2020, 10, 1, 9).strftime('%Y-%m-%dT%H:%M'),
+                'price_per_session': '3.45',
+                'role_play_level': Campaign.RP_HEAVY,
+            },
+        )
+        camp = Campaign.objects.get()
+        self.assertRedirects(r, camp.get_absolute_url())
+        assert camp.name == 'A new campaign'
+        assert camp.accepting_players
+        assert camp.beginners_welcome
+        assert camp.campaign_type == Campaign.TYPE_MODULAR
+        assert camp.description == 'A new new campaign'
+        assert camp.max_players == 2
+        assert camp.mature_content
+        assert camp.status == Campaign.STATUS_PENDING
+        assert camp.next_game_dt == datetime.datetime(2020, 10, 1, 9, tzinfo=utc)
+        assert camp.price_per_session == Decimal('3.45')
+        assert camp.role_play_level == Campaign.RP_HEAVY
+
+    def test_edit_camp_not_gm(self):
+        player = self.player_client.user
+        camp = CampaignFactory(name='FooBar')
+        camp.players.add(player)
+        r = self.player_client.get(reverse('campaign-edit', args=[camp.pk]))
+        assert r.status_code == 404
+        r = self.gm_client.get(reverse('campaign-edit', args=[camp.pk]))
+        assert r.status_code == 404
+
+    def test_delete_camp(self):
+        camp = CampaignFactory(name='FooBar', creator=self.gm_client.user.gamemaster)
+        r = self.player_client.post(reverse('campaign-delete', args=[camp.pk]))
+        assert r.status_code == 404
+        r = self.gm_client.post(reverse('campaign-delete', args=[camp.pk]))
+        self.assertRedirects(r, reverse('avail-campaign-list'))
+        assert not Campaign.objects.exists()
+
+    def test_change_camp_status(self):
+        camp = CampaignFactory(
+            name='FooBar', creator=self.gm_client.user.gamemaster, status=Campaign.STATUS_IN_PROGRESS
+        )
+        assert Campaign.objects.get().status == Campaign.STATUS_IN_PROGRESS
+        url = reverse('campaign-change-status', args=[camp.pk])
+        r = self.player_client.post(url, {'status': Campaign.STATUS_PENDING})
+        assert r.status_code == 404
+        r = self.gm_client.post(url, {'status': Campaign.STATUS_PENDING})
+        self.assertRedirects(r, camp.get_absolute_url())
+        assert Campaign.objects.get().status == Campaign.STATUS_PENDING
+        r = self.gm_client.post(url, {'status': 'Foo'})
+        assert r.status_code == 400

@@ -1,11 +1,11 @@
 {% extends 'base.jinja' %}
 
 {% block content %}
-  <div id="games-filter-form">
-{#    Filter form is the filter_form object passed through the context to this template. Renders nicely#}
-    {{ filter_form.role_play_level }}
+  <div id="campaigns-filter-form">
+    {# Filter form is the filter_form object passed through the context to this template. Renders nicely #}
+    {{ filter_form }}
   </div>
-  <div id="games-list" data-camps-data-url="{{ url('avail-campaigns-data') }}">
+  <div id="campaigns-list" data-camps-data-url="{{ url('avail-campaigns-data') }}">
 {#    Perhaps have a spinner here or loading icon?#}
   </div>
 {% endblock %}

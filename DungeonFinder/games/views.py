@@ -1,9 +1,16 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import SuspiciousOperation
 from django.db.models import Count, F
+from django.forms import modelform_factory
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 
+from DungeonFinder.common.forms import DFModelForm
+from DungeonFinder.common.views import DFCreateView, DFEditView
 from DungeonFinder.games.forms import CampaignsFilterForm
 from DungeonFinder.games.models import Campaign
 
@@ -66,5 +73,69 @@ class CampaignDetails(DetailView):
     model = Campaign
     template_name = 'games/camp-details.jinja'
 
+    def get_context_data(self, **kwargs):
+        camp = self.get_object()
+        game_details_visible = self.request.user.is_authenticated and (
+            self.request.user.id in self.get_object().players.values_list('id', flat=True)
+            or (self.request.user.gamemaster and camp.creator_id == self.request.user.gamemaster.id)
+        )
+        return super().get_context_data(game_details_visible=game_details_visible, **kwargs)
+
 
 campaign_details = CampaignDetails.as_view()
+
+
+class CampaignUpdateMixin(LoginRequiredMixin):
+    model = Campaign
+    template_name = 'games/camp-edit.jinja'
+
+
+class CampaignCreate(CampaignUpdateMixin, DFCreateView):
+    form_class = modelform_factory(model=Campaign, form=DFModelForm, fields='__all__')
+
+    def dispatch(self, request, *args, **kwargs):
+        if not (request.user.is_authenticated and request.user.is_gm):
+            messages.info(request, 'Only Game Masters can create games')
+            return redirect('avail-campaign-list')
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.creator = self.request.user.gamemaster
+        instance.save()
+        return redirect(instance.get_absolute_url())
+
+
+campaign_create = CampaignCreate.as_view()
+
+
+class CampaignEdit(CampaignUpdateMixin, DFEditView):
+    form_class = modelform_factory(model=Campaign, form=DFModelForm, fields='__all__', exclude=['creator'])
+
+    def get_queryset(self):
+        return Campaign.objects.filter(creator=getattr(self.request.user, 'gamemaster', None))
+
+
+campaign_edit = CampaignEdit.as_view()
+
+
+@require_POST
+@login_required(login_url='/accounts/login/')
+def campaign_delete(request, pk):
+    obj = get_object_or_404(Campaign.objects.filter(creator=getattr(request.user, 'gamemaster', None)), pk=pk)
+    obj.delete()
+    return redirect('avail-campaign-list')
+
+
+@require_POST
+@login_required(login_url='/accounts/login/')
+def campaign_change_status(request, pk):
+    obj = get_object_or_404(Campaign.objects.filter(creator=getattr(request.user, 'gamemaster', None)), pk=pk)
+    status = request.POST['status']
+    try:
+        assert status in [k for k, v in Campaign.STATUS_CHOICES]
+    except AssertionError:
+        raise SuspiciousOperation('Invalid status chosen')
+    obj.status = status
+    obj.save()
+    return redirect(obj.get_absolute_url())
