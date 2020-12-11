@@ -6,6 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
 from django.dispatch import receiver
 from django.urls import reverse
+from pytz import utc
 
 
 class GMRequestMixin:
@@ -33,7 +34,7 @@ login = Login.as_view()
 
 @receiver(user_logged_in)
 def update_user_history(sender, user, **kwargs):
-    user.last_logged_in = datetime.now()
+    user.last_logged_in = datetime.now().replace(tzinfo=utc)
     user.save(update_fields=['last_logged_in'])
 
 

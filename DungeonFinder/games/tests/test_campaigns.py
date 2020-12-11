@@ -141,9 +141,9 @@ class CampEditTestCase(TestCase):
 
     def test_add_camp_not_gm(self):
         r = self.client.get(reverse('campaign-create'))
-        self.assertRedirects(r, reverse('avail-campaign-list'))
+        assert r.status_code == 403
         r = self.player_client.get(reverse('campaign-create'))
-        self.assertRedirects(r, reverse('avail-campaign-list'))
+        assert r.status_code == 403
 
     def test_add_camp(self):
         r = self.gm_client.get(reverse('campaign-create'))
@@ -214,7 +214,7 @@ class CampEditTestCase(TestCase):
         camp = CampaignFactory(name='FooBar')
         camp.players.add(player)
         r = self.player_client.get(reverse('campaign-edit', args=[camp.pk]))
-        assert r.status_code == 404
+        assert r.status_code == 403
         r = self.gm_client.get(reverse('campaign-edit', args=[camp.pk]))
         assert r.status_code == 404
 
