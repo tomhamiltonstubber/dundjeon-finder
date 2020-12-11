@@ -6,7 +6,23 @@ window.$ = window.jQuery = $
 
 $(document).ready(() => {
   init_games_list()
+  menu()
 })
+
+const menu = () => {
+  const $menu_toggle = $('#nav-toggle');
+  const $side_menu = $('#side-menu');
+
+  $($menu_toggle).click(() => {
+    if($($menu_toggle).hasClass("active")){
+      $($menu_toggle).removeClass("active");
+      $($side_menu).removeClass("active");
+    }else{
+      $($menu_toggle).addClass("active");
+      $($side_menu).addClass("active");
+    }
+  });
+}
 
 const init_games_list = () => {
   const $filter_form = $('#filter_form')
