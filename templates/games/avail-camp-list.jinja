@@ -1,11 +1,14 @@
 {% extends 'base.jinja' %}
 
 {% block content %}
-  <div id="campaigns-filter-form">
-    {# Filter form is the filter_form object passed through the context to this template. Renders nicely #}
-    {{ filter_form }}
-  </div>
-  <div id="campaigns-list" data-camps-data-url="{{ url('avail-campaigns-data') }}">
-{#    Perhaps have a spinner here or loading icon?#}
-  </div>
+<section class="text-white" style="padding-top: 50px;">
+  <div class="flex">
+    <div class="h-screen px-6 py-12 sticky top-0 filter-panel">
+     {% include "/partials/filter.jinja" %}
+   </div>
+   <div class="w-full pt-10">
+    <div class="grid grid-cols-3 gap-3 pb-20 px-10" id="campaigns-list" data-camps-data-url="{{ url('avail-campaigns-data') }}">
+    </div>
+</div>
+</section>
 {% endblock %}

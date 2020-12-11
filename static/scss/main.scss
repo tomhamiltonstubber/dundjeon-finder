@@ -2,7 +2,230 @@
 @import "~tailwindcss/components";
 @import "~tailwindcss/utilities";
 
-body, p {
-  background-color: #ccc;
-  color: red;
+/* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline; } /* HTML5 display-role reset for older browsers */ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; } body { line-height: 1; } ol, ul { list-style: none; } blockquote, q { quotes: none; } blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; } table { border-collapse: collapse; border-spacing: 0; }
+
+.light{
+    background: url(https://dnd.wizards.com/sites/all/themes/dx/img/interface/page-background.jpg);
+}
+
+body{
+   background-color: #0f1722;
+}
+
+body.invert{
+    background: #fdecc7;
+}
+
+body.index,
+body.login{
+    background-position: top;
+    background-image: url(http://ludos-paradise.ancorathemes.com/wp-content/uploads/2018/01/bg-9-copyright-3.jpg);
+    background-repeat: no-repeat;
+}
+
+.invert nav{
+    background-color: #fdecc7;
+}
+
+.invert .filter-select{
+    background-color: #fdecc7;
+}
+
+.invert .bg-gray-800{
+    background: #e0c998;
+}
+
+.invert .filter-select select{
+    color: #333;
+}
+
+.filter-panel{
+    /*background-image: linear-gradient(45deg, black, #1a202e);*/
+    border-right: 1px solid rgb(142 130 130 / 26%);
+}
+
+.invert .filter-select img { filter: invert(1); }
+
+.invert .text-white{
+    color: #333;
+}
+
+nav{
+    background: #1a202e;
+    border-bottom: 1px solid rgb(142 130 130 / 26%);
+    height: 50px;
+    overflow: visible;
+}
+
+.invert nav .logo{
+    background-image: url(../img/nav-shield-invert.png);
+}
+
+nav .logo{
+	background-image: url(../img/nav-shield.png);
+    height: 100px;
+    width: 100px;
+    background-size: cover;
+    background-position: bottom;
+}
+
+nav .logo:hover{
+    opacity: 1;
+}
+
+nav a{
+	position: relative;
+}
+
+nav li a:hover:before{
+	content: "";
+    display: block !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translatex(-50%) translatey(-50%);
+    width: 40%;
+    height: 0;
+    box-shadow: 0 0 60px 10px rgba(223, 60, 60, 0.3);
+    transition: all ease 0.3s;
+}
+
+img{
+	max-width: 100%;
+}
+
+.btn{
+    background-image: -webkit-linear-gradient(top, #f63d3d, #940b0b);
+}
+
+.btn:hover{
+    filter: brightness(0.8);
+}
+
+input{
+    color: #333!important;
+}
+
+figure{
+    position: relative;
+}
+
+.bg-dark-blue{
+    background: #1a202e;
+}
+
+.invert .bg-dark-blue {
+    background: #e7d4a9;
+}
+
+p{
+    margin: 1em 0!important;
+}
+
+button{
+    outline: none!important;
+}
+
+/* Search */
+.sort{
+    border-bottom: 1px solid rgb(142 130 130 / 26%);
+}
+.search figure{
+    position: relative;
+}
+
+.search figure:after{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 0 3px #000000;
+    top: 0;
+    left: 0;
+    border: 1px solid #0f1722;
+}
+
+
+
+.navbar-burger svg:first-of-type,
+.navbar-burger.active svg:last-of-type{
+    display: block;
+}
+
+.navbar-burger.active svg:first-of-type,
+.navbar-burger svg:last-of-type{
+    display: none;
+}
+
+.invert .navbar-burger svg {
+    fill: #333;
+}
+
+
+#side-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 200px;
+    z-index: 20;
+    transform: translateX(200px);
+    transition: transform .3s ease;
+    border-left: 1px solid rgb(142 130 130 / 26%);
+}
+
+#side-menu.active{
+    transform: translateX(0);
+}
+
+.pt-50{
+ padding-top: 50px;
+}
+
+
+/* Toggle button styles */
+.toggle {
+  min-width: 80px;
+  min-height: 40px;
+  margin-bottom: 1rem;
+  position: relative;
+  border: 2px solid;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color ease 250ms;
+}
+
+.toggle.clicked {
+    background: #dabf83;
+}
+
+.toggle::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    border-radius: 30px;
+    transition: transform ease 250ms;
+    background-image: url(../img/moon.svg);
+    background-size: cover;
+    border: 5px solid #1a202e;
+    background-position: center;
+}
+
+.toggle.clicked::after {
+    transform: translateX(100%);
+    background-image: url(../img/sun.svg);
+    border-color: #dabf83;
+}
+
+article{
+    background: url(../img/border-2.jpg);
+    padding: .25em;
+}
+article h2{
+  color: #bc161d;
 }

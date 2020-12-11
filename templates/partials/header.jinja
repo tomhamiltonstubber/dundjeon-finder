@@ -1,0 +1,58 @@
+<nav class="px-3 absolute w-full z-40" data-nav="one">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-2 items-start">
+        <a class="flex flex-col font-cursive items-center logo px-3 py-6 text-white" href="/">
+          <img src="/static/img/dnd-logo-white.png" class="w-10">
+          <span class="mt-2">Finder</span>
+        </a>
+        <div class="navbar-menu hidden lg:flex lg:items-center w-full lg:w-auto font-cursive">
+        {% if request.user.is_authenticated %}
+        <ul class="lg:ml-auto">
+        <li class="block lg:inline-block mt-4 lg:mt-0">
+          <a href="/account" class="text-white">
+            Hi {{user}}
+          </a>
+          </li>
+          <span class="mx-2 text-white">|</span>
+          <li class="block lg:inline-block mt-4 lg:mt-0">
+          <a href="/logout" class="text-white">
+            Logout
+          </a>
+          </li>
+          </ul>
+        {% else %}
+          <ul class="lg:ml-auto">
+            <li class="block lg:inline-block mt-4 lg:mt-0 text-red-600">
+             <a href="/login">Login</a>
+           </li>
+           <span class="mx-2 text-white">|</span>
+           <li class="block lg:inline-block mt-4 lg:mt-0 text-red-600">
+             <a href="/sign-up">Sign Up</a>
+           </li>
+         </ul>
+        {% endif %}
+         <div class="block ml-6 bg-gray-800">
+          <button class="navbar-burger flex items-center text-white outline-none p-3" id="navToggle">
+            <svg class="h-6 w-6" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="#fff">
+              <title>Menu</title>
+              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+            </svg>
+            <svg class="h-6 w-6" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" x="0px" y="0px"><path d="m7.41421356 6 4.24264064 4.2426407-1.4142135 1.4142135-4.2426407-4.24264064-4.24264069 4.24264064-1.41421356-1.4142135 4.24264069-4.2426407-4.24264069-4.24264069 1.41421356-1.41421356 4.24264069 4.24264069 4.2426407-4.24264069 1.4142135 1.41421356z" fill-rule="evenodd" transform="translate(2 2)"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<div id="side-menu" class="text-white font-cursive bg-dark-blue flex flex-col pt-50">
+  <ul class="p-10">
+    <li class="p-5"><a href="/about" class="hover:text-red-600">About</a></li>
+    <li class="p-5"><a href="/about" class="hover:text-red-600">About</a></li>
+    <li class="p-5"><a href="/about" class="hover:text-red-600">About</a></li>
+    <li class="p-5"><a href="/about" class="hover:text-red-600">Blog</a></li>
+    <li class="p-5"><a href="/about" class="hover:text-red-600">Contact</a></li>
+  </ul>
+  <div class="mt-auto p-5">
+    <button class="block mx-auto toggle" id="toggle" onclick="toggleTheme(this)"></button>
+  </div>
+</div>
