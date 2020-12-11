@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.contrib import messages
-from django.contrib.auth import user_logged_in, login as dj_login
+from django.contrib.auth import login as dj_login, user_logged_in
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.views import LoginView
@@ -11,11 +11,10 @@ from django.db import IntegrityError
 from django.dispatch import receiver
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.safestring import mark_safe
 from django.views.generic import TemplateView
 from pytz import utc
 
-from DungeonFinder.common.views import generate_random_key, DFFormView
+from DungeonFinder.common.views import DFFormView, generate_random_key
 from DungeonFinder.users.forms import UserSignupForm
 from DungeonFinder.users.models import User
 
@@ -73,7 +72,6 @@ class UserSignUp(DFFormView):
         data = {k: v for k, v in form.cleaned_data.items() if k not in {'password1', 'password2', 'captcha'}}
         data['password'] = make_password(form.cleaned_data['password1'])
         key = generate_random_key()
-        debug(key)
         cache.set('signup-' + key, data, 86400 * 7)  # store in cache for 1 week
         # TODO: Send the email to the user to confirm signup
         confirm_link = reverse('signup-confirm', kwargs={'key': key})
@@ -105,9 +103,10 @@ def signup_confirm(request, key):
             'A user already exists with either that Email address or screen name. Please try signing up again',
         )
         return redirect('dashboard')
-    dj_login(request, user)
-    messages.success(request, 'Account successfully created.')
-    return redirect(data.get('next') or '/')
+    else:
+        dj_login(request, user)
+        messages.success(request, 'Account successfully created.')
+        return redirect(data.get('next') or '/')
 
 
 class UserProfileUpdate:

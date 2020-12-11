@@ -1,7 +1,7 @@
 import binascii
 import os
 
-from django.views.generic import CreateView, UpdateView, FormView
+from django.views.generic import CreateView, FormView, UpdateView
 
 
 class FormRequestMixin:
