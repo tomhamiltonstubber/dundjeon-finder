@@ -10,7 +10,7 @@ $(document).ready(() => {
 
 const init_games_list = () => {
   const $filter_form = $('#filter_form')
-  const $games_list = $('#games-list')
+  const $games_list = $('#campaigns-list')
 
   if ($games_list.length) {
     const update_games_list = () => {
