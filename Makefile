@@ -28,7 +28,7 @@ lint:
 
 .PHONY: test
 test:
-	pytest --maxfail=8 -n8 --cov=DungeonFinder --cov-report term:skip-covered --durations 20
+	pytest --maxfail=8 --cov=DungeonFinder --cov-report term:skip-covered --durations 20
 
 .PHONY: reset-db
 reset-db:
