@@ -48,13 +48,17 @@ class User(AbstractUser):
     def __str__(self):
         return f'{self.screen_name}'
 
+    @property
+    def is_gm(self):
+        return hasattr(self, 'gamemaster')
+
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
 
 class GameMaster(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='gamemaster')
 
 
 class GMReview(models.Model):

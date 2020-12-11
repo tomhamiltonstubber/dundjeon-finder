@@ -4,12 +4,20 @@ from django import forms
 from django.utils import timezone
 
 
-class DFForm(forms.Form):
+class DFFormMixin:
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super().__init__(*args, **kwargs)
         for f in self.fields:
             self.fields[f].widget.attrs = {'class': 'dk-field'}
+
+
+class DFForm(DFFormMixin, forms.Form):
+    pass
+
+
+class DFModelForm(DFFormMixin, forms.ModelForm):
+    pass
 
 
 def date2datetime(date, day_end=False):
