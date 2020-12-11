@@ -239,3 +239,32 @@ class CampEditTestCase(TestCase):
         assert Campaign.objects.get().status == Campaign.STATUS_PENDING
         r = self.gm_client.post(url, {'status': 'Foo'})
         assert r.status_code == 400
+
+
+class CampJoinTestCase(TestCase):
+    def setUp(self):
+        self.campaign = CampaignFactory()
+        self.url = reverse_lazy('campaign-join', args=[self.campaign.pk])
+        self.client = AuthenticatedClient(is_gm=False)
+
+    def test_join_game(self):
+        r = self.client.post(self.url)
+        self.assertRedirects(r, self.campaign.get_absolute_url())
+
+    def test_join_unavailable_game(self):
+        self.campaign.accepting_players = False
+        self.campaign.save()
+        r = self.client.post(self.url)
+        assert r.status_code == 404
+
+    def test_join_full_game(self):
+        self.campaign.players.add(UserFactory())
+        self.campaign.max_players = 1
+        self.campaign.save()
+        r = self.client.post(self.url)
+        assert r.status_code == 404
+
+    def test_join_game_already_on(self):
+        self.campaign.players.add(self.client.user)
+        r = self.client.post(self.url)
+        assert r.status_code == 403

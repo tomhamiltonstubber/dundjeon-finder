@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import SuspiciousOperation
+from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.db.models import Count, F
 from django.forms import modelform_factory
 from django.http import JsonResponse
@@ -13,6 +12,7 @@ from DungeonFinder.common.forms import DFModelForm
 from DungeonFinder.common.views import DFCreateView, DFEditView
 from DungeonFinder.games.forms import CampaignsFilterForm
 from DungeonFinder.games.models import Campaign
+from DungeonFinder.users.views import GMRequestMixin
 
 
 def index(request):
@@ -77,7 +77,7 @@ class CampaignDetails(DetailView):
         camp = self.get_object()
         game_details_visible = self.request.user.is_authenticated and (
             self.request.user.id in self.get_object().players.values_list('id', flat=True)
-            or (self.request.user.gamemaster and camp.creator_id == self.request.user.gamemaster.id)
+            or (self.request.user.is_gm and camp.creator_id == self.request.user.gamemaster.id)
         )
         return super().get_context_data(game_details_visible=game_details_visible, **kwargs)
 
@@ -85,19 +85,13 @@ class CampaignDetails(DetailView):
 campaign_details = CampaignDetails.as_view()
 
 
-class CampaignUpdateMixin(LoginRequiredMixin):
+class CampaignUpdateMixin(GMRequestMixin):
     model = Campaign
     template_name = 'games/camp-edit.jinja'
 
 
 class CampaignCreate(CampaignUpdateMixin, DFCreateView):
     form_class = modelform_factory(model=Campaign, form=DFModelForm, fields='__all__')
-
-    def dispatch(self, request, *args, **kwargs):
-        if not (request.user.is_authenticated and request.user.is_gm):
-            messages.info(request, 'Only Game Masters can create games')
-            return redirect('avail-campaign-list')
-        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         instance = form.save(commit=False)
@@ -139,3 +133,17 @@ def campaign_change_status(request, pk):
     obj.status = status
     obj.save()
     return redirect(obj.get_absolute_url())
+
+
+@require_POST
+@login_required(login_url='/accounts/login/')
+def campaign_join(request, pk):
+    camp_qs = Campaign.objects.annotate(free_spaces=F('max_players') - Count('players')).filter(
+        status__in=Campaign.STATUS_JOINABLE, free_spaces__gt=0, accepting_players=True
+    )
+    camp = get_object_or_404(camp_qs, pk=pk)
+    if camp in request.user.campaigns.all():
+        raise PermissionDenied('You are already part of this game')
+    camp.players.add(request.user)
+    messages.success(request, "You've joined this game. Have fun!")
+    return redirect(camp.get_absolute_url())
