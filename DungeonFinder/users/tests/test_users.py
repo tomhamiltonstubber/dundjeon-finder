@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from captcha.client import RecaptchaResponse
 from django.core.cache import cache
-from django.test import Client, TestCase, TransactionTestCase, override_settings
+from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from pytz import utc
 
@@ -47,7 +47,7 @@ class UserAuthTestCase(TestCase):
 
 
 @override_settings(RECAPTCHA_TESTING=True)
-class UserSignupTestCase(TransactionTestCase):
+class UserSignupTestCase(TestCase):
     def setUp(self):
         cache.clear()
         self.signup_url = reverse('signup')
