@@ -10,17 +10,17 @@ $(document).ready(() => {
 
 const init_games_list = () => {
   const $filter_form = $('#filter_form')
-  const $games_list = $('#campaigns-list')
+  const $campaigns_list = $('#campaigns-list')
 
-  if ($games_list.length) {
+  if ($campaigns_list.length) {
     const update_games_list = () => {
       const form_data = $filter_form.serialize()
-      $.get($games_list.data('camps-data-url') + '?' + form_data)
+      $.get($campaigns_list.data('camps-data-url') + '?' + form_data)
         .done(data => {
           const $games_list_html = games_list.render({games_data: data})
-          $games_list.html($games_list_html).show()
+          $campaigns_list.html($games_list_html).show()
         })
-        .fail($games_list.html('<div class="error">An error occurred.</div>'))
+        .fail($campaigns_list.html('<div class="error">An error occurred.</div>'))
     }
     update_games_list()
     $('#games-filter-form *').change(() => {

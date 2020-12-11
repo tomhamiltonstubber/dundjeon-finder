@@ -15,6 +15,7 @@ class Campaign(models.Model):
         (STATUS_IN_PROGRESS, 'In progress'),
         (STATUS_FINISHED, 'Finished'),
     )
+    STATUS_JOINABLE = [STATUS_PENDING, STATUS_IN_PROGRESS]
     TYPE_HOMEBREW = 'homebrew'
     TYPE_MODULAR = 'modular'
     TYPE_SOURCE_BOOK = 'source-book'
@@ -36,7 +37,7 @@ class Campaign(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     creator = models.ForeignKey('users.GameMaster', on_delete=models.CASCADE, editable=False)
     description = models.TextField(null=True, blank=True)
-    players = models.ManyToManyField('users.User', related_name='games', blank=True, editable=False)
+    players = models.ManyToManyField('users.User', related_name='campaigns', blank=True, editable=False)
     mature_content = models.BooleanField('Contains mature content', default=False)
     max_players = models.IntegerField(default=5, validators=[MinValueValidator(1)])
     next_game_dt = models.DateTimeField(null=True, blank=True)
