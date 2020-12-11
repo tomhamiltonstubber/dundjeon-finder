@@ -7,8 +7,11 @@
     {% block content %}{% endblock %}
     {% include '/partials/footer.jinja' %}
 
-    {# Tailwind CDN to be removed prior to production #}
+    {# Tailwind CDN and fonts to be removed prior to production #}
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Spectral+SC:ital,wght@0,300;0,500;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital@0;1&display=swap" rel="stylesheet">
     <script src="{{ static('/dist/main.js') }}"></script>
   </body>
 </html>

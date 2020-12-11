@@ -24,6 +24,20 @@ body.login{
     background-repeat: no-repeat;
 }
 
+
+.font-heading,
+.font-cursive{
+    font-family: 'Spectral SC', serif;
+    font-weight: 400;
+    font-style: normal;
+}
+body,
+.font-body{
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 .invert nav{
     background-color: #fdecc7;
 }
