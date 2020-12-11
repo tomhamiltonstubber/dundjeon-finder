@@ -23,7 +23,7 @@ const init_games_list = () => {
         .fail($games_list.html('<div class="error">An error occurred.</div>'))
     }
     update_games_list()
-    $('#games_list_filter_field').change(() => {
+    $('#games-filter-form *').change(() => {
       update_games_list()
     })
   }
