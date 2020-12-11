@@ -1,0 +1,39 @@
+form{
+    background:#fff;
+    border-radius: 4px;
+    color: #333;
+
+    label{
+        display: block;
+        text-align: left;
+        margin-bottom: .5em;
+        font-weight: 600;
+        font-size: .85em;
+    }
+
+    input{
+        margin-bottom: 1.5em;
+
+        & ~ .helptext {
+            margin-top: -2em;
+            font-style: italic;
+        }
+    }
+
+    .helptext {
+        text-align: left;
+        font-size: .6em;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    .text-field{
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        background: #eee;
+        width: 100%;
+        padding: .35em;
+    }
+}

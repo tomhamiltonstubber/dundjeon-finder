@@ -9,7 +9,10 @@ class DFFormMixin:
         self.request = request
         super().__init__(*args, **kwargs)
         for f in self.fields:
-            self.fields[f].widget.attrs.update({'class': 'dk-field'})
+            if isinstance(self.fields[f], forms.CharField):
+                self.fields[f].widget.attrs.update({'class': 'text-field'})
+            if isinstance(self.fields[f], forms.EmailField):
+                self.fields[f].widget.attrs.update({'class': 'text-field'})
 
 
 class DFForm(DFFormMixin, forms.Form):

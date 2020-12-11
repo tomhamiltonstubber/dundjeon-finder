@@ -1,11 +1,18 @@
 {% extends 'base.jinja' %}
 
 {% block content %}
-  <form method="post">
-    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-    <div id="signup-form">
-      {{ form }}
-      <button class="btn btn-primary" type="submit">Sign up</button>
+<section class="pb-20 pt-20 px-4 text-center text-white flex items-center">
+  <div class="w-full max-w-2xl mx-auto">
+    <h2 class="text-4xl mt-2 leading-tight font-heading">Create Account</h2>
+    <div class="w-full max-w-xl mx-auto py-10">
+      <form method="post">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <div id="signup-form" class="p-10">
+          {{ form }}
+          <button class="btn btn-primary" type="submit">Signup</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
+</section>
 {% endblock %}
