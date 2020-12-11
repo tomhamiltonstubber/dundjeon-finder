@@ -1,0 +1,65 @@
+.btn{
+    background-image: -webkit-linear-gradient(top, #ad121a, #78070c);
+}
+.form{
+    width: 220px;
+}
+.filter-select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: #000;
+    border: 2px solid #424b61;
+    margin-bottom: 2em;
+    border-radius: 40px;
+    overflow: hidden;
+}
+
+.filter-select:first-of-type{
+    margin-left: 0;
+}
+
+.filter-select span {
+    pointer-events: none;
+    position: absolute;
+    left: 1em;
+    width: 1.5em;
+    height: 1.5em;
+    z-index: 1;
+}
+
+label{
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+.filter-select select,
+.filter-select input[type="date"] {
+    background: transparent;
+    color: #fff;
+    appearance: none;
+    padding: 1em;
+    background-image: url(/static/img/dropdown.png);
+    background-size: 4em;
+    background-repeat: no-repeat;
+    background-position: 100%;
+    padding-left: 4em;
+    cursor: pointer;
+    width: 260px;
+    filter: grayscale(.6);
+}
+
+.filter-select select:hover{
+    filter: grayscale(0);
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+}
+
+.filter-select input[type="date"]{
+   // To be updated to display date icon rather than dropdown.
+}
+

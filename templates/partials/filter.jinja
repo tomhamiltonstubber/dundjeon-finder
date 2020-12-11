@@ -1,61 +1,62 @@
-<div class="flex flex-col form text-xs" id="games-filter-form">
-	filter coming soon
+<div class="flex flex-col form text-xs pt-5" id="games-filter-form">
+  <div>
+    <label for="players" class="mb-2 block">Campaign type:</label>
+    <div class="filter-select">
+      <span>
+        <img src="/static/img/user.svg">
+      </span>
+      {{filter_form.campaign_type}}
+    </div>
+  </div>
+  <div>
+    <label for="players" class="mb-2 block">Role play level:</label>
+    <div class="filter-select">
+      <span>
+        <img src="/static/img/user.svg">
+      </span>
+      {{filter_form.role_play_level}}
+    </div>
+  </div>
+  <div>
+    <label for="players" class="mb-2 block">Role play level:</label>
+    <div class="filter-select">
+      <span>
+        <img src="/static/img/user.svg">
+      </span>
+      {{filter_form.role_play_level}}
+    </div>
+  </div>
+  <div>
+    <label for="players" class="mb-2 block">Game Start:</label>
+    <div class="filter-select">
+      <span>
+        <img src="/static/img/user.svg">
+      </span>
+      <input type="date" name="next_game_from">
+    </div>
+  </div>
+  <div>
+    <label for="players" class="mb-2 block">Game End:</label>
+    <div class="filter-select">
+      <span>
+        <img src="/static/img/user.svg">
+      </span>
+      <input type="date" name="next_game_from">
+    </div>
+  </div>
+  <div>
+    <label for="players" class="flex justify-between mb-2">
+      <span>Beginners Welcome</span>
+      {{filter_form.beginners_welcome}}
+    </label>
+  </div>
+  <div>
+    <label for="players" class="flex justify-between">
+      <span>Exclude Mature Content</span>
+      {{filter_form.exclude_mature_content}}
+    </label>
+  </div>
 </div>
 
-<style>
-	.btn{
-		background-image: -webkit-linear-gradient(top, #ad121a, #78070c);
-	}
-	.form{
-		width: 220px;
-	}
-	.filter-select {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		position: relative;
-		background: #000;
-		border: 2px solid #424b61;
-		margin-bottom: 2em;
-		border-radius: 40px;
-		overflow: hidden;
-	}
 
-	.filter-select:first-of-type{
-		margin-left: 0;
-	}
 
-	.filter-select span {
-		pointer-events: none;
-		position: absolute;
-	    left: 1em;
-	    width: 1.5em;
-	    height: 1.5em;
-	    z-index: 1;
-	}
-
-	label{
-		font-weight: 600;
-		font-size: 1.2em;
-	}
-
-	.filter-select select {
-		background: transparent;
-		color: #fff;
-		appearance: none;
-		padding: 1em;
-		background-image: url(/static/img/dropdown.png);
-		background-size: 4em;
-		background-repeat: no-repeat;
-		padding-right: 8em;
-		background-position: 100%;
-		padding-left: 4em;
-		cursor: pointer;
-		width: 260px;
-		filter: grayscale(.6);
-	}
-
-	.filter-select select:hover{
-		filter: grayscale(0);
-	}
-</style>
