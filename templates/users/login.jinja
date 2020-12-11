@@ -6,12 +6,12 @@
     <h2 class="text-6xl mt-2 mb-6 leading-tight font-heading">Login</h2>
     <div class="w-full max-w-sm mx-auto">
       <form method="post">
-          <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-          <div id="login-form">
-            {{ form }}
-            <button class="btn btn-primary" type="submit">Login</button>
-          </div>
-        </form>
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <div id="login-form">
+          {{ form }}
+          <button class="btn btn-primary" type="submit">Login</button>
+        </div>
+      </form>
     </div>
   </div>
 </section>

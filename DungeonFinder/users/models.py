@@ -63,3 +63,8 @@ class User(AbstractUser):
 
 class GameMaster(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='gamemaster')
+
+    def __str__(self):
+        if self.user.screen_name:
+            return self.user.screen_name
+        return f'{self.user.first_name} {self.user.last_name[0]}'

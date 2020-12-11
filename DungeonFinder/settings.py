@@ -1,4 +1,6 @@
 import os
+from urllib.parse import urlparse
+
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -25,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'DungeonFinder.staticfiles',
     'django.contrib.staticfiles',
+    'captcha',
     'DungeonFinder.games',
     'DungeonFinder.users',
     'DungeonFinder.common',
@@ -74,8 +77,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'DungeonFinder.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# =======================
+#  Database
+# =======================
 
 if LIVE:
     import dj_database_url
@@ -93,6 +97,10 @@ else:
         }
     }
 
+
+# =======================
+#  Authentication
+# =======================
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -113,13 +121,21 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+PASSWORD_MIN_LENGTH = 8
 
+# =======================
+#  Localization
+# =======================
 
 LANGUAGE_CODE = 'en-gb'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+# =======================
+#  Static Files
+# =======================
 
 STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -165,6 +181,32 @@ LOGGING = {
         'django.security.DisallowedHost': {'handlers': ['null'], 'propagate': False},
         'sentry.errors': {'level': 'WARNING', 'handlers': ['debug_console'], 'propagate': False},
     },
+}
+
+# =======================
+#  ReCaptcha
+# =======================
+
+# Test keys will be used by default
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', '')
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_SECRET_KEY', '')
+
+# =======================
+#   Redis and RQ
+# =======================
+redis_url = urlparse(os.getenv('REDISCLOUD_URL', 'redis://localhost:6379'))
+redis_db = os.getenv('REDIS_DB', '0')
+redis_connections = int(os.getenv('REDIS_CONNECTIONS', '50'))
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'redis://{redis_url.hostname}:{redis_url.port}/{redis_db}',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'PASSWORD': redis_url.password,
+            'CONNECTION_POOL_KWARGS': {'max_connections': redis_connections},
+        },
+    }
 }
 
 
