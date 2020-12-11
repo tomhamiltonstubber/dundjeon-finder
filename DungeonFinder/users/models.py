@@ -29,7 +29,9 @@ class User(AbstractUser):
     email = models.EmailField('Email Address', unique=True)
     first_name = models.CharField('First name', max_length=30, blank=True)
     last_name = models.CharField('Last name', max_length=150, blank=True)
-    last_logged_in = models.DateTimeField('Last Logged in', default=datetime(2020, 1, 1, tzinfo=timezone.utc))
+    last_logged_in = models.DateTimeField(
+        'Last Logged in', default=datetime(2020, 1, 1, tzinfo=timezone.utc), editable=False
+    )
     screen_name = models.CharField(
         max_length=150,
         unique=True,
@@ -37,8 +39,10 @@ class User(AbstractUser):
         validators=[UnicodeUsernameValidator],
         error_messages={'unique': 'A user with that screen name already exists.'},
     )
-    is_active = models.BooleanField(default=True, help_text='Unselect this instead of deleting accounts.')
-    is_admin = models.BooleanField('Is super user', default=False)
+    is_active = models.BooleanField(
+        default=True, help_text='Unselect this instead of deleting accounts.', editable=False
+    )
+    is_admin = models.BooleanField('Is super user', default=False, editable=False)
 
     # We aren't using username as the unique field here. Instead, people can enter a screen name.
     username = None
@@ -59,7 +63,3 @@ class User(AbstractUser):
 
 class GameMaster(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='gamemaster')
-
-
-class GMReview(models.Model):
-    pass
