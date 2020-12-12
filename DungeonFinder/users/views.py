@@ -15,8 +15,7 @@ from django.views.generic import TemplateView
 from pytz import utc
 
 from DungeonFinder.common.views import DFFormView, generate_random_key
-from DungeonFinder.messaging.emails import EmailRecipient, UserEmail, send_email
-from DungeonFinder.messaging.models import EmailTemplate
+from DungeonFinder.messaging.emails import EmailRecipient, EmailTemplate, UserEmail, send_email
 from DungeonFinder.users.forms import UserSignupForm
 from DungeonFinder.users.models import User
 

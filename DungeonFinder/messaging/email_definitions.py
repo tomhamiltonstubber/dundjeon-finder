@@ -1,5 +1,5 @@
 def get_email_definition(template_type):
-    from DungeonFinder.messaging.models import EmailTemplate
+    from DungeonFinder.messaging.emails import EmailTemplate
 
     return {
         EmailTemplate.TEMPLATE_SIGNUP: {

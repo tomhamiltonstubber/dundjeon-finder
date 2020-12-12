@@ -2,11 +2,15 @@ import logging
 from dataclasses import dataclass
 
 import boto3
+import sass
 from botocore.exceptions import ClientError
 from django.conf import settings
+from django.core.cache import cache
 from django_rq import job
+from jinja2 import Template as JinjaTemplate
+from markdown.core import markdown
 
-from DungeonFinder.messaging.models import EmailTemplate
+from DungeonFinder.messaging.email_definitions import get_email_definition
 from DungeonFinder.users.models import User
 
 df_logger = logging.getLogger('df.messaging')
@@ -17,6 +21,51 @@ ses_client = boto3.client(
     aws_access_key_id=settings.AWS_ACCESS_KEY,
     aws_secret_access_key=settings.AWS_SECRET_KEY,
 )
+
+
+class EmailTemplate:
+    TEMPLATE_SIGNUP = 'signup_confirmation'  # Sent to confirm someone's signed up
+    TEMPLATE_WELCOME = 'welcome_user'  # Sent when someone has confirmed signup
+    TEMPLATE_JOINED_GAME = 'joined_game'  # Sent to player when they join a game
+    TEMPLATE_PLAYER_JOINED = 'player_joined'  # Sent to GM when a player joins their game
+
+    TEMPLATE_TYPES = [TEMPLATE_SIGNUP, TEMPLATE_WELCOME, TEMPLATE_JOINED_GAME, TEMPLATE_PLAYER_JOINED]
+    template_type: str
+
+    def __init__(self, template_type):
+        self.template_type = template_type
+
+    def email_definition(self):
+        return get_email_definition(self.template_type)
+
+    @staticmethod
+    def _cached_email_styles():
+        cache_key = 'file_email_css'
+        content = cache.get(cache_key)
+        if content:
+            return content
+        css = sass.compile(filename='static/scss/emails.scss')
+        cache.set(cache_key, css, 86400)
+        return css
+
+    @staticmethod
+    def _cached_jinja_content():
+        cache_key = 'file_email_template'
+        content = cache.get(cache_key)
+        if content:
+            return content
+        with open('DungeonFinder/messaging/email_templates/email_base.jinja') as f:
+            content = f.read()
+        cache.set(cache_key, content, 86400)
+        return content
+
+    def rendered_content(self, content: str, context: dict) -> (str, str):
+        text = JinjaTemplate(content).render(context)
+        rendered_text = markdown(text)
+        rendered_html = JinjaTemplate(self._cached_jinja_content()).render(
+            {'content': rendered_text, 'styles': self._cached_email_styles()}
+        )
+        return rendered_text, rendered_html
 
 
 @dataclass
@@ -45,7 +94,7 @@ class UserEmail:
 
     @property
     def template(self):
-        self._template = self._template or EmailTemplate.objects.get(template_type=self.template_type)
+        self._template = self._template or EmailTemplate(self.template_type)
         return self._template
 
 
@@ -66,7 +115,6 @@ def aws_send_email(recipient, *, sender: EmailRecipient, subject: str, text_body
     except ClientError as e:
         df_logger.error(f'Error sending email: {e}')
     else:
-        debug(response)
         df_logger.info(f'Sending email {response["MessageId"]} to {recipient}')
 
 

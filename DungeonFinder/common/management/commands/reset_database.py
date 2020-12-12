@@ -2,7 +2,6 @@ from django.core.management import BaseCommand, call_command
 from django.db import connection
 
 from DungeonFinder.games.models import Campaign
-from DungeonFinder.messaging.models import EmailTemplate
 from DungeonFinder.users.models import GameMaster, User
 
 
@@ -72,8 +71,6 @@ class Command(BaseCommand):
         game3 = Campaign.objects.create(name='Curse of Strahd', description='A future game', creator=gm, max_players=5)
         game3.players.add(p3)
 
-        for template_type in EmailTemplate.TEMPLATE_TYPES:
-            EmailTemplate.objects.create(template_type=template_type)
         print(
             '\n    Created 3 players, 1 GM and 3 games.\n '
             '   You can login using [player1/2/3 or gm or admin]@example.com with password testing1\n'
