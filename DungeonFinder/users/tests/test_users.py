@@ -56,7 +56,7 @@ class UserSignupTestCase(TransactionTestCase):
     def test_user_signup(self, mock_cap):
         mock_cap.return_value = RecaptchaResponse(is_valid=True)
         r = self.client.get(self.signup_url)
-        self.assertContains(r, 'Sign up')
+        self.assertContains(r, 'Sign Up')
         r = self.client.post(
             self.signup_url,
             data={
@@ -86,7 +86,7 @@ class UserSignupTestCase(TransactionTestCase):
     def test_user_signup_wrong_password(self, mock_cap):
         mock_cap.return_value = RecaptchaResponse(is_valid=True)
         r = self.client.get(self.signup_url)
-        self.assertContains(r, 'Sign up')
+        self.assertContains(r, 'Sign Up')
         r = self.client.post(
             self.signup_url,
             data={
@@ -122,7 +122,7 @@ class UserSignupTestCase(TransactionTestCase):
     def test_user_signup_duplicate_screen_name(self, mock_cap):
         mock_cap.return_value = RecaptchaResponse(is_valid=True)
         r = self.client.get(self.signup_url)
-        self.assertContains(r, 'Sign up')
+        self.assertContains(r, 'Sign Up')
         UserFactory(screen_name='FooScreenName')
         r = self.client.post(
             self.signup_url,
@@ -142,7 +142,7 @@ class UserSignupTestCase(TransactionTestCase):
     def test_user_signup_duplicate_email(self, mock_cap):
         mock_cap.return_value = RecaptchaResponse(is_valid=True)
         r = self.client.get(self.signup_url)
-        self.assertContains(r, 'Sign up')
+        self.assertContains(r, 'Sign Up')
         UserFactory(email='foo@example.com')
         r = self.client.post(
             self.signup_url,
@@ -162,7 +162,7 @@ class UserSignupTestCase(TransactionTestCase):
     def test_user_confirm_signup(self, mock_cap):
         mock_cap.return_value = RecaptchaResponse(is_valid=True)
         r = self.client.get(self.signup_url)
-        self.assertContains(r, 'Sign up')
+        self.assertContains(r, 'Sign Up')
         r = self.client.post(
             self.signup_url,
             data={
@@ -191,7 +191,7 @@ class UserSignupTestCase(TransactionTestCase):
     def test_user_confirm_duplicate_screen_name(self, mock_cap):
         mock_cap.return_value = RecaptchaResponse(is_valid=True)
         r = self.client.get(self.signup_url)
-        self.assertContains(r, 'Sign up')
+        self.assertContains(r, 'Sign Up')
         r = self.client.post(
             self.signup_url,
             data={
@@ -219,7 +219,7 @@ class UserSignupTestCase(TransactionTestCase):
     def test_user_confirm_duplicate_email(self, mock_cap):
         mock_cap.return_value = RecaptchaResponse(is_valid=True)
         r = self.client.get(self.signup_url)
-        self.assertContains(r, 'Sign up')
+        self.assertContains(r, 'Sign Up')
         r = self.client.post(
             self.signup_url,
             data={
