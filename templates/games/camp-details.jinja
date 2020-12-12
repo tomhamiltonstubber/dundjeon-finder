@@ -2,50 +2,101 @@
 
 {% block content %}
 
-<section class="pt-32 pb-10 text-white">
-	<div class="container mx-auto">
+<section class="pt-32 pb-10 text-white" id="overview">
+	<div class="container mx-auto text-center">
 		<div class="flex">
-			<div class="w-1/4">
-				{% include "/partials/profile_listing.jinja" %}
+			<div class="w-3/4 pl-10 mx-auto">
+				<h2 class="text-3xl mt-2 leading-tight font-heading text-gradient">{{ campaign.name }}</h2>
+				<h3 class="text-2xl mt-2 leading-tight font-heading text-gray-500">4 Days until next game</h3>
+				<div class="bg-dark-blue grid grid-cols-4 text-xs text-white px-5 py-3 mt-10">
+        <div class="flex items-center">
+            <img src="/static/img/user.svg" class="w-5 mr-2">
+            <span class="pt-1">1</span>
+        </div>
+        <div class="flex items-center">
+            <img src="/static/img/dice.svg" class="w-5 mr-2">
+            <span class="pt-1">3</span>
+        </div>
+        <div class="flex items-center">
+            <img src="/static/img/dice.svg" class="w-5 mr-2">
+            <span class="pt-1">3</span>
+        </div>
+        <div class="flex items-center">
+            <img src="/static/img/calendar.svg" class="w-5 mr-3">
+            <span class="pt-1">20/12/06</span>
+        </div>
+    </div>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="py-10" id="story">
+	<div class="container mx-auto">
+		<div class="w-2/3 mx-auto">
+			<div class="hr-icon">
+				<img src="/static/img/shield-and-sword.svg" alt="">
+			</div>
+			 <hr class="hr-text text-xl" data-content="The Story">
+				<div class="text-white camp-story bg-gradient-to-t block border-2 border-gray-600 border-solid from-gray-800 p-10 pt-0">
+					<p>{{ campaign.description }}</p>
+					<!-- P tags to be removed, when we create the input field for the description. This 
+						should be a WYSIWYG editor, allowing the users to create their own paragraphs --->
+				</div>
+		</div>
+	</div>
+</section>
+<section class="py-10" id="gm">
+	<div class="container mx-auto">
+		<div class="w-2/3 mx-auto">
+			<div class="hr-icon">
+				<img src="/static/img/crown.svg" alt="">
+			</div>
+			 <hr class="hr-text text-xl" data-content="The GM">
+		</div>
+		<div class="flex">
+			<div class="w-1/4 pl-10">
+			{% include "/partials/profile_listing.jinja" %}
 			</div>
 			<div class="w-3/4 pl-10">
-				<h2 class="text-3xl mt-2 leading-tight font-heading">{{ campaign.name }}</h2>
-				<h3 class="text-2xl mt-2 leading-tight font-heading text-gray-500">4 Days until next game</h3>
-				<div class="w-1/3 relative hidden" style="margin-top:-65px;margin-bottom:-300px;">
-					<img src="https://images.twinkl.co.uk/tr/image/upload/illustation/Campfire.png">
-				</div>
+			
+			</div>
 			</div>
 		</div>
 	</div>
 </section>
-<section class="bg-gray-300 py-10">
+<section class="py-10" id="players">
 	<div class="container mx-auto text-center">
-		<div class="w-2/3 mx-auto text-xl leading-7">
-			<h2 class="text-2xl font-heading">The Story</h2>
-			{{ campaign.description }}
+		<div class="w-2/3 mx-auto text-white mb-10">
+			<div class="hr-icon">
+				<img src="/static/img/helmet.svg" alt="">
+			</div>
+			 <hr class="hr-text text-xl leading-7" data-content="The Players">
 		</div>
-	</div>
-</section>
-<section class="py-10">
-	<div class="container mx-auto text-center">
-		<div class="w-2/3 mx-auto text-xl leading-7 text-white mb-10">
-			<h2 class="text-2xl font-heading">The Players</h2>
-		</div>
-		<div class="flex flex-wrap">
+		<div class="flex flex-wrap justify-center">
 			{% for player in campaign.players.all() %}
 				{% include "/partials/player.jinja" %}
 			{% endfor %}
 		</div>
 	</div>
 </section>
-<section class="py-10 bg-gray-500">
-	<div class="container mx-auto text-center">
-		<div class="w-2/3 mx-auto text-xl leading-7 text-white mb-10">
-			<h2 class="text-2xl font-heading">Reviews for [INSERT CAMPAIGN PLAYER NAME]</h2>
+<div class="bg-red-800 text-white bottom-0 fixed flex items-center justify-between p-6 text-xs w-full z-10 font-heading">
+		<div>
+			{{campaign}}
 		</div>
-	</div>
-</section>
-<div class="fixed bottom-20 right-20 text-xs">
+		<ul class="flex">
+		<li>
+			<a href="#overview" class="p-5">Overview</a>
+		</li>
+		<li>
+		<a href="#story" class="p-5">Story</a>
+		</li>
+		<li>
+		<a href="#gm" class="p-5">Game Master</a>
+		</li>
+		<li>
+		<a href="#players" class="p-5">Players</a>
+		</li>
+		</ul>
 	<button class="inline-block py-4 px-8 leading-none text-white btn hover:bg-indigo-600 rounded shadow">
 		Join Campaign
 	</button>
