@@ -1,0 +1,18 @@
+{% extends 'base.jinja' %}
+
+{% block content %}
+<section class="pb-20 pt-20 px-4 text-center text-white flex items-center">
+  <div class="w-full max-w-2xl mx-auto">
+    <h2 class="text-4xl mt-2 leading-tight font-heading">Welcome Back</h2>
+    <div class="w-full max-w-xl mx-auto py-10">
+      <form method="post">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <div id="login-form" class="p-10">
+          {{ form }}
+          <button class="btn btn-primary" type="submit">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
