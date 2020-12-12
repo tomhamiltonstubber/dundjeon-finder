@@ -17,8 +17,8 @@ const config = {
     require('precss'),
     require('autoprefixer'),
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
+      $: 'jquery',
+      jQuery: 'jquery'
     }),
     new MiniCssExtractPlugin({filename: '[name].css'}),
   ],
@@ -31,7 +31,7 @@ const config = {
       },
       {
         test: /\.s[ac]ss$/i,
-        exclude: /node_modules/,
+        exclude: /node_modules|static\/emails\.scss/,
         use: [
           MiniCssExtractPlugin.loader,
           {loader: 'css-loader', options: {importLoaders: 1}},
