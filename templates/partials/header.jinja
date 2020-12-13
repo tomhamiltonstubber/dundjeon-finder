@@ -1,36 +1,34 @@
 <nav class="px-3 absolute w-full z-40" data-nav="one">
     <div class="container mx-auto">
-      <div class="grid grid-cols-2 items-start">
+      <div class="flex items-start justify-center">
         <a class="flex flex-col font-cursive items-center logo px-3 py-6 text-white" href="/">
           <img src="/static/img/dnd-logo-white.png" class="w-10">
           <span class="mt-2">Finder</span>
         </a>
-        <div class="navbar-menu hidden lg:flex lg:items-center w-full lg:w-auto font-cursive">
+        <div class="flex font-cursive items-center ml-auto navbar-menu w-auto">
+        <ul class="flex hidden items-center md:flex">
         {% if request.user.is_authenticated %}
-        <ul class="lg:ml-auto">
-        <li class="block lg:inline-block mt-4 lg:mt-0">
+        <li class="block lg:inline-block">
           <a href="/account" class="text-white">
             Hi {{user}}
           </a>
           </li>
           <span class="mx-2 text-white">|</span>
-          <li class="block lg:inline-block mt-4 lg:mt-0">
+          <li class="block lg:inline-block">
           <a href="/logout" class="text-white">
             Logout
           </a>
           </li>
-          </ul>
         {% else %}
-          <ul class="lg:ml-auto">
-            <li class="block lg:inline-block mt-4 lg:mt-0 text-red-600">
+            <li class="block lg:inline-block text-red-600">
              <a href="/login">Login</a>
            </li>
            <span class="mx-2 text-white">|</span>
-           <li class="block lg:inline-block mt-4 lg:mt-0 text-red-600">
+           <li class="block lg:inline-block text-red-600">
              <a href="/signup">Sign Up</a>
            </li>
-         </ul>
         {% endif %}
+        </ul>
          <div class="block ml-6 bg-gray-800">
           <button class="navbar-burger flex items-center text-white outline-none p-3" id="nav-toggle">
             <svg class="h-6 w-6" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="#fff">
