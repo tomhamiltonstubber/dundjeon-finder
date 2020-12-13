@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import '../scss/main.scss'
+import "tailwindcss/tailwind.css"
 import games_list from '../js/templates/games_list.njk'
 
 window.$ = window.jQuery = $

@@ -1,6 +1,6 @@
-@import "~tailwindcss/base";
-@import "~tailwindcss/components";
-@import "~tailwindcss/utilities";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @import "forms";
 @import "campaign";
@@ -118,10 +118,7 @@ img{
 
 .btn{
     background-image: -webkit-linear-gradient(top, #f63d3d, #940b0b);
-    padding: 1rem 2rem;
-    line-height: 1;
-    border-radius: .25rem;
-    color: #fff;
+    @apply px-6 py-2 text-white rounded;
 }
 
 .btn:hover{
