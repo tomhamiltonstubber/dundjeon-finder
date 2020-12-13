@@ -28,6 +28,7 @@ const menu = () => {
 const init_games_list = () => {
   const $filter_form = $('#filter_form')
   const $campaigns_list = $('#campaigns-list')
+  const $loading_screen = $('#campaigns-loading-screen')
 
   if ($campaigns_list.length) {
     const update_games_list = () => {
@@ -36,11 +37,14 @@ const init_games_list = () => {
         .done(data => {
           const $games_list_html = games_list.render({games_data: data})
           $campaigns_list.html($games_list_html).show()
+          setTimeout(function(){
+            $loading_screen.removeClass("active");
+          }, 500)
         })
-        .fail($campaigns_list.html('<div class="error">An error occurred.</div>'))
     }
     update_games_list()
-    $('#games-filter-form *').change(() => {
+    $('#games-filter-form input, #games-filter-form select').on("change", function(event) {
+      $loading_screen.addClass("active");
       update_games_list()
     })
   }
