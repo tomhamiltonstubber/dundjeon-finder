@@ -5,21 +5,11 @@
           <img src="/static/img/dnd-logo-white.png" class="w-10">
           <span class="mt-2">Finder</span>
         </a>
-        <div class="flex font-cursive items-center ml-auto navbar-menu w-auto">
-        <ul class="flex hidden items-center md:flex">
+        <div class="flex items-center ml-auto navbar-menu w-auto">
         {% if request.user.is_authenticated %}
-        <li class="block lg:inline-block">
-          <a href="/account" class="text-white">
-            Hi {{user}}
-          </a>
-          </li>
-          <span class="mx-2 text-white">|</span>
-          <li class="block lg:inline-block">
-          <a href="/logout" class="text-white">
-            Logout
-          </a>
-          </li>
+          {% include "/partials/user_menu.jinja" %}
         {% else %}
+        <ul class="flex hidden items-center md:flex">
             <li class="block lg:inline-block text-red-600">
              <a href="/login">Login</a>
            </li>
@@ -27,7 +17,6 @@
            <li class="block lg:inline-block text-red-600">
              <a href="/signup">Sign Up</a>
            </li>
-        {% endif %}
         </ul>
          <div class="block ml-6 bg-gray-800">
           <button class="navbar-burger flex items-center text-white outline-none p-3" id="nav-toggle">
@@ -38,6 +27,7 @@
             <svg class="h-6 w-6" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" x="0px" y="0px"><path d="m7.41421356 6 4.24264064 4.2426407-1.4142135 1.4142135-4.2426407-4.24264064-4.24264069 4.24264064-1.41421356-1.4142135 4.24264069-4.2426407-4.24264069-4.24264069 1.41421356-1.41421356 4.24264069 4.24264069 4.2426407-4.24264069 1.4142135 1.41421356z" fill-rule="evenodd" transform="translate(2 2)"></path></svg>
           </button>
         </div>
+        {% endif %}
       </div>
     </div>
   </div>
