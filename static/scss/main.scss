@@ -3,12 +3,14 @@
 @import "tailwindcss/utilities";
 @import "fonts";
 
-
+@import "header";
+@import "helper";
 
 @import "forms";
 @import "campaign";
 @import "filter";
 @import "hr";
+@import "theme";
 @import "typography";
 
 /* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline; } /* HTML5 display-role reset for older browsers */ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; } body { line-height: 1; } ol, ul { list-style: none; } blockquote, q { quotes: none; } blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; } table { border-collapse: collapse; border-spacing: 0; }
@@ -46,10 +48,6 @@ body,
     font-style: normal;
 }
 
-.invert nav{
-    background-color: #fdecc7;
-}
-
 .invert .filter-select{
     background-color: #fdecc7;
 }
@@ -71,48 +69,6 @@ body,
 
 .invert .text-white{
     color: #333;
-}
-
-nav{
-    background: #1a202e;
-    border-bottom: 1px solid rgb(142 130 130 / 26%);
-    height: 50px;
-    overflow: visible;
-}
-
-.invert nav .logo{
-    background-image: url(../img/nav-shield-invert.png);
-}
-
-nav .logo{
-	background-image: url(../img/nav-shield.png);
-    height: 100px;
-    width: 100px;
-    background-size: cover;
-    background-position: bottom;
-}
-
-nav .logo:hover{
-    opacity: 1;
-}
-
-nav a{
-	position: relative;
-}
-
-nav li a:hover:before{
-	content: "";
-    display: block !important;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    right: auto;
-    bottom: auto;
-    transform: translatex(-50%) translatey(-50%);
-    width: 40%;
-    height: 0;
-    box-shadow: 0 0 60px 10px rgba(223, 60, 60, 0.3);
-    transition: all ease 0.3s;
 }
 
 img{
@@ -245,7 +201,4 @@ button{
 article{
     background: url(../img/border-2.jpg);
     padding: .25em;
-}
-article h2{
-  color: #bc161d;
 }
