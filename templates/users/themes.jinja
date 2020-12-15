@@ -1,0 +1,54 @@
+{% extends 'base.jinja' %}
+
+{% block content %}
+<section class="pb-20 pt-20 px-4 text-center flex items-center">
+  <div class="w-full max-w-5xl mx-auto">
+    <h2 class="text-4xl mt-2 leading-tight font-heading">Choose your style</h2>
+    <p class="text-xl mt-2">
+        Change your theme and colours below. <br/>Don't worry, you can change these at any time.
+    </p>
+    <h2 class="text-3xl mt-10 leading-tight font-heading">Dark</h2>
+    <div class="py-10 grid grid-cols-3 grid-s gap-3">
+      <div class="theme-option" data-theme="red">
+            <img src="/static/img/theme-red.png">
+            <div class="mt-1">
+                Red
+            </div>
+      </div>
+      <div class="theme-option selected" data-theme="green">
+            <img src="/static/img/theme-green.png">
+            <div class="mt-1">
+                Green
+            </div>
+      </div>
+         <div class="theme-option" data-theme="blue">
+            <img src="/static/img/theme-green.png">
+            <div class="mt-1">
+                Blue
+            </div>
+            </div>
+    </div>
+    <h2 class="text-3xl mt-10 leading-tight font-heading">Light</h2>
+    <div class="py-10 grid grid-cols-3 grid-s gap-3">
+      <div class="theme-option" data-theme="light-red">
+            <img src="/static/img/theme-red.png">
+            <div class="mt-1">
+                Red
+            </div>
+      </div>
+      <div class="theme-option" data-theme="light-green">
+            <img src="/static/img/theme-green.png">
+            <div class="mt-1">
+                Green
+            </div>
+      </div>
+         <div class="theme-option" data-theme="light-blue">
+            <img src="/static/img/theme-green.png">
+            <div class="mt-1">
+                Blue
+            </div>
+            </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -9,7 +9,7 @@ from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from django.dispatch import receiver
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.generic import TemplateView
 from pytz import utc
@@ -119,3 +119,6 @@ class GMSignUp:
 
 class GMProfileUpdate:
     pass
+
+def themes(request):
+    return render(request, '/users/themes.jinja')
