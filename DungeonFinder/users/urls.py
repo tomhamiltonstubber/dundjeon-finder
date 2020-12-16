@@ -9,5 +9,5 @@ urlpatterns = [
     path('signup/', views.user_signup, name='signup'),
     path('signup/pending/', views.signup_pending, name='signup-pending'),
     path('signup/confirm/<str:key>/', views.signup_confirm, name='signup-confirm'),
-    path('themes/', views.themes, name='user-themes'),
+    path('themes/', views.user_update_theme, name='user-themes'),
 ]

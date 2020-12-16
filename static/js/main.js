@@ -57,7 +57,7 @@ $(".theme-option").on("click", function(){
   $("body").removeClass (function (index, css) {
     return (css.match (/(^|\s)theme-\S+/g) || []).join(' ');
   });
-  $("body").addClass("theme-" + $theme);
+  $("body").addClass($theme);
 
   // Add selected to new theme option and remove from previous
   $(".theme-option.selected").removeClass("selected");
