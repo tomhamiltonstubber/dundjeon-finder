@@ -4,20 +4,19 @@ from django.contrib import messages
 from django.contrib.auth import login as dj_login, user_logged_in
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from django.dispatch import receiver
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 from pytz import utc
 
 from DungeonFinder.common.views import DFFormView, generate_random_key
-from DungeonFinder.users.forms import UserSignupForm
-from DungeonFinder.users.forms import UserUpdateThemeForm
+from DungeonFinder.users.forms import UserSignupForm, UserUpdateThemeForm
 from DungeonFinder.users.models import User
 
 
@@ -122,13 +121,14 @@ class GMSignUp:
 class GMProfileUpdate:
     pass
 
+
 class UserUpdateTheme(LoginRequiredMixin, DFFormView):
-    model = User   # The model that will be edited
+    model = User  # The model that will be edited
     form_class = UserUpdateThemeForm  # The form that we'll insert into the template and validate with
     template_name = 'users/themes.jinja'  # Your bit
 
     def get_object(self, queryset=None):
-        return self.request.user  
+        return self.request.user
 
     def form_valid(self, form):
         theme = form.cleaned_data['theme']
