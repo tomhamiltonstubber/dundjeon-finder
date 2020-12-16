@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login as dj_login, user_logged_in
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.mixins import LoginRequiredMixin as LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
@@ -11,10 +12,11 @@ from django.db import IntegrityError
 from django.dispatch import receiver
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.generic import TemplateView
+from django.views.generic import DetailView, TemplateView
 from pytz import utc
 
-from DungeonFinder.common.views import DFFormView, generate_random_key
+from DungeonFinder.common.forms import DFModelForm
+from DungeonFinder.common.views import DFEditView, DFFormView, generate_random_key
 from DungeonFinder.messaging.emails import EmailRecipient, EmailTemplate, UserEmail, send_email
 from DungeonFinder.users.forms import UserSignupForm
 from DungeonFinder.users.models import User
@@ -119,8 +121,33 @@ def signup_confirm(request, key):
         return redirect(data.get('next') or '/')
 
 
-class UserProfileUpdate:
-    pass
+class UserProfileForm(DFModelForm):
+    class Meta:
+        model = User
+        fields = 'first_name', 'last_name', 'screen_name', 'avatar'
+
+
+class UserUpdateProfile(LoginRequiredMixin, DFEditView):
+    model = User
+    form_class = UserProfileForm
+    template_name = 'users/profile-update.jinja'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+edit_profile = UserUpdateProfile.as_view()
+
+
+class UserProfile(DetailView):
+    model = User
+    template_name = 'users/profile.jinja'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+user_profile = UserProfile.as_view()
 
 
 class GMSignUp:

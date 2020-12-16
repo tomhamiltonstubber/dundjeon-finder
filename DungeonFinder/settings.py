@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'DungeonFinder.staticfiles',
     'django.contrib.staticfiles',
+    'django_extensions',
     'captcha',
     'django_rq',
     'DungeonFinder.games',
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'DungeonFinder.urls'
@@ -115,6 +117,7 @@ else:
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
+LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'users.User'
 AUTH_PASSWORD_VALIDATORS = [
@@ -140,11 +143,13 @@ USE_TZ = True
 #  AWS
 # =======================
 
-AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY', '')
-AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY', '')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', '')
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', 'dungeon-finder')
 AWS_PUBLIC_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', 'dungeon-finder-public')
 AWS_REGION = os.getenv('AWS_REGION', 'eu-west-2')
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 
 # =======================
@@ -161,6 +166,21 @@ SEND_EMAILS = True
 STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_URL = '/static/'
+AWS_STATIC_LOCATION = 'static'
+
+PUBLIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_PUBLIC_BUCKET_NAME
+PUBLIC_URL = os.getenv('PUBLIC_URL', PUBLIC_URL)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+if not LIVE:
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    MEDIA_URL = '/media/'
+    PUBLIC_URL = '/media/public/'
+
+
+# =======================
+#  Sentry
+# =======================
 
 if sentry_dsn := os.getenv('SENTRY_DSN'):
     sentry_sdk.init(dsn=sentry_dsn, integrations=[DjangoIntegration()], send_default_pii=True)
