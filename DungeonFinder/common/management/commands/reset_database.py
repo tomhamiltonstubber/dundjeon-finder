@@ -70,6 +70,7 @@ class Command(BaseCommand):
         game2.players.add(p2, p3)
         game3 = Campaign.objects.create(name='Curse of Strahd', description='A future game', creator=gm, max_players=5)
         game3.players.add(p3)
+
         print(
             '\n    Created 3 players, 1 GM and 3 games.\n '
             '   You can login using [player1/2/3 or gm or admin]@example.com with password testing1\n'
