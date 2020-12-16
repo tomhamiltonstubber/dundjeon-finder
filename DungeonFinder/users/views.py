@@ -15,6 +15,7 @@ from django.views.generic import TemplateView
 from pytz import utc
 
 from DungeonFinder.common.views import DFFormView, generate_random_key
+from DungeonFinder.messaging.emails import EmailRecipient, EmailTemplate, UserEmail, send_email
 from DungeonFinder.users.forms import UserSignupForm
 from DungeonFinder.users.models import User
 
@@ -73,9 +74,18 @@ class UserSignUp(DFFormView):
         data['password'] = make_password(form.cleaned_data['password1'])
         key = generate_random_key()
         cache.set('signup-' + key, data, 86400 * 7)  # store in cache for 1 week
-        # TODO: Send the email to the user to confirm signup
         confirm_link = reverse('signup-confirm', kwargs={'key': key})
-        print(f'\n\nSignup confirm link: {confirm_link}\n\n')
+        send_email.delay(
+            UserEmail(
+                recipient=EmailRecipient(
+                    email=data['email'],
+                    first_name=data['first_name'],
+                    last_name=data['last_name'],
+                ),
+                context={'confirm_link': confirm_link},
+                template_type=EmailTemplate.TEMPLATE_SIGNUP,
+            )
+        )
         return redirect('signup-pending')
 
 
