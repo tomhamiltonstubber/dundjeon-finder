@@ -116,7 +116,7 @@ campaign_edit = CampaignEdit.as_view()
 
 
 @require_POST
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/signup/')
 def campaign_delete(request, pk):
     obj = get_object_or_404(Campaign.objects.filter(creator=getattr(request.user, 'gamemaster', None)), pk=pk)
     obj.delete()
@@ -124,7 +124,7 @@ def campaign_delete(request, pk):
 
 
 @require_POST
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/signup/')
 def campaign_change_status(request, pk):
     obj = get_object_or_404(Campaign.objects.filter(creator=getattr(request.user, 'gamemaster', None)), pk=pk)
     status = request.POST['status']
@@ -138,7 +138,7 @@ def campaign_change_status(request, pk):
 
 
 @require_POST
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/signup/')
 def campaign_join(request, pk):
     camp_qs = Campaign.objects.annotate(free_spaces=F('max_players') - Count('players')).filter(
         status__in=Campaign.STATUS_JOINABLE, free_spaces__gt=0, accepting_players=True

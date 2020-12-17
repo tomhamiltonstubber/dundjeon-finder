@@ -70,3 +70,21 @@ $(".theme-option").on("click", function(){
   $(".theme-option.selected").removeClass("selected");
   $(this).addClass("selected");
 });
+
+
+$('[data-method="POST"]').not('[data-confirm]').not('.no-submit').click(function (e) {
+  const $a = $(this)
+  const link = $a.attr('href')
+  e.preventDefault()
+  if (link === '#') {
+    return
+  }
+  const form = $('#post-form')
+  form.attr('action', link)
+  for (const [key, value] of Object.entries($a.data())) {
+    if (key !== 'method') {
+      $('<input>').attr({type: 'hidden', name: key, value: value}).appendTo(form)
+    }
+  }
+  form.submit()
+})

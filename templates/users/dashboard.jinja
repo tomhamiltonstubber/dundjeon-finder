@@ -1,10 +1,44 @@
 {% extends 'base.jinja' %}
 
 {% block content %}
-<section class="pb-20 pt-20 px-4 text-center flex items-center">
-  <div class="w-full max-w-5xl mx-auto">
-    <h2 class="text-4xl mt-2 leading-tight font-heading">Welcome back {{user}}</h2>
-</div>
-</div>
+<section class="pb-20 pt-20 px-4 flex items-center">
+	<div class="w-full max-w-5xl mx-auto">
+		<div class="pt-10">
+			<div class="w-2/3 mx-auto text-white mb-10">
+				<div class="hr-icon">
+					<img src="/static/img/helmet.svg" alt="">
+				</div>
+				<hr class="hr-text text-xl leading-7" data-content="Campaigns">
+			<table class="w-full">
+				<thead>
+					<tr class="text-gray-400 text-left">
+						<th class="w-1/2">Name</th>
+						<th class="w-1/4">Game Master</th>
+						<th class="w-1/4">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+				{% for camp in user.campaigns.all() %}
+					<tr>
+						<td class="py-5">{{camp.name}}</td>
+						<td class="py-5">
+							{{camp.creator}}
+						</td>
+						<td class="py-5 align-middle">
+						<div class="flex items-center">
+							<a href="#" class="mr-4">
+								<img src="/static/img/quit.svg" class="w-5 h-5">
+							</a>
+							<a href="{{camp.get_absolute_url()}}">
+								<img src="/static/img/eye.svg" class="w-6 h-6">
+							</a>
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </section>
 {% endblock %}
