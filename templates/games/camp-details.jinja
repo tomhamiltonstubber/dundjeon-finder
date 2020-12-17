@@ -97,20 +97,24 @@
 				<a href="#players" class="p-5">Players</a>
 			</li>
 		</ul>
-		{% if user.is_authenticated %}
-			{% if user in campaign.players.all() %}
-			<a href="/campaigns/{{campaign.id}}/leave/" data-method="POST" class="inline-block py-4 px-8 leading-none text-white btn hover:bg-indigo-600 rounded shadow">
-				Leave Campaign
-			</a>
-			{% else %}
-			<a href="/campaigns/{{campaign.id}}/join/" data-method="POST" class="inline-block py-4 px-8 leading-none text-white btn hover:bg-indigo-600 rounded shadow">
-				Join Campaign
-			</a>
-			{% endif %}
+		{% if campaign.game_full() %}
+			This game is full, please check another
 		{% else %}
-			<a href="/signup/?campaign={{campaign.name}}" class="inline-block py-4 px-8 leading-none text-white btn hover:bg-indigo-600 rounded shadow">
-				Sign up to join this Campaign
-			</a>
+			{% if user.is_authenticated %}
+				{% if user in campaign.players.all() %}
+				<a href="/campaigns/{{campaign.id}}/leave/" data-method="POST" class="inline-block py-4 px-8 leading-none text-white btn hover:bg-indigo-600 rounded shadow">
+					Leave Campaign
+				</a>
+				{% else %}
+				<a href="/campaigns/{{campaign.id}}/join/" data-method="POST" class="inline-block py-4 px-8 leading-none text-white btn hover:bg-indigo-600 rounded shadow">
+					Join Campaign
+				</a>
+				{% endif %}
+			{% else %}
+				<a href="/signup/?campaign={{campaign.name}}" class="inline-block py-4 px-8 leading-none text-white btn hover:bg-indigo-600 rounded shadow">
+					Sign up to join this Campaign
+				</a>
+			{% endif %}
 		{% endif %}	
 </div>
 

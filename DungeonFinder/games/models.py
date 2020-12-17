@@ -50,6 +50,12 @@ class Campaign(models.Model):
     def __str__(self):
         return self.name
 
+    def game_full(self):
+        if self.players.count() == self.max_players:
+            return True
+        else:
+            return False
+
     def get_absolute_url(self):
         return reverse('campaign-details', kwargs={'pk': self.pk})
 
