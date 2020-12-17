@@ -4,9 +4,9 @@
   </head>
   <body class="{{user.user_theme}}">
     {% include '/partials/header.jinja' %}
+    {% include '/partials/alerts.jinja' %}
     {% block content %}{% endblock %}
     {% include '/partials/footer.jinja' %}
-  
     <script src="{{ static('/dist/main.js') }}"></script>
   </body>
 </html>

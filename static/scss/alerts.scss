@@ -1,0 +1,22 @@
+.alert{
+	-webkit-animation: 1s ease 0s normal forwards 1 alertFadeIn;
+	animation: 1s ease 0s normal forwards 1 alertFadeIn;
+
+	.alert-success {
+		background: green;
+	}
+	.alert-error {
+		background: red;
+	}
+}
+
+@keyframes alertFadeIn{
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
