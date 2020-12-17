@@ -50,6 +50,13 @@ const init_games_list = () => {
   }
 }
 
+$(".alert").on("click", function(){
+  $(this).fadeOut();
+  setTimeout(function(){
+      $(this).remove();
+  }, 1000)
+});
+
 $(".theme-option").on("click", function(){
   var $theme = $(this).data("theme");
 
