@@ -32,7 +32,7 @@ class UserAuthTestCase(TestCase):
 
         r = client.post(reverse('login'), data={'username': 'hystera@example.com', 'password': 'testing1'}, follow=True)
         self.assertRedirects(r, '/')
-        self.assertContains(r, 'Logout')
+        self.assertContains(r, 'Sign out')
         self.assertNotContains(r, 'Login')
         assert User.objects.get(id=user.id).last_logged_in.date() == dt.now().date()
 
@@ -40,9 +40,9 @@ class UserAuthTestCase(TestCase):
         client = AuthenticatedClient()
         assert client.user.is_authenticated
         r = client.get('/')
-        self.assertContains(r, 'Logout')
+        self.assertContains(r, 'Sign out')
         r = client.post(reverse('logout'), follow=True)
-        self.assertNotContains(r, 'Logout')
+        self.assertNotContains(r, 'Sign out')
         self.assertRedirects(r, '/')
 
 
