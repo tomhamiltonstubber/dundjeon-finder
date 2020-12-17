@@ -10,6 +10,12 @@
 				</div>
 				<hr class="hr-text text-xl leading-7" data-content="Campaigns">
 			<table class="w-full">
+				{% if user.campaigns.count() == 0 %}
+					<div class="text-center">
+						<h2 class="mb-6">You haven't joined any games yet, click here to view all games.</h2>
+						<a href="{{ url('avail-campaign-list')}}" class="btn">View Games</a>
+					</div>
+				{% else %}
 				<thead>
 					<tr class="text-gray-400 text-left">
 						<th class="w-1/2">Name</th>
@@ -36,6 +42,7 @@
 						</td>
 					</tr>
 				{% endfor %}
+				{% endif %}
 				</tbody>
 			</table>
 		</div>
