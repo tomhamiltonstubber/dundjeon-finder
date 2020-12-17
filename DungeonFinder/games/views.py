@@ -16,6 +16,8 @@ from DungeonFinder.users.views import GMRequestMixin
 
 
 def index(request):
+    if request.user.is_authenticated:
+        return render(request, 'users/dashboard.jinja')
     return render(request, 'index.jinja')
 
 
