@@ -2,7 +2,7 @@
   <head>
     <link rel="stylesheet" href="{{ static('/dist/main.css') }}" crossorigin="anonymous">
   </head>
-  <body>
+  <body class="{{user.user_theme}}">
     {% include '/partials/header.jinja' %}
     {% block content %}{% endblock %}
     {% include '/partials/footer.jinja' %}

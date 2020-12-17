@@ -3,7 +3,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.password_validation import validate_password
 
-from DungeonFinder.common.forms import DFModelForm
+from DungeonFinder.common.forms import DFForm, DFModelForm
 from DungeonFinder.users.models import User
 
 
@@ -54,3 +54,13 @@ class UserSignupForm(DFModelForm):
     class Meta:
         model = User
         fields = 'email', 'first_name', 'last_name', 'screen_name'
+
+
+class UserUpdateThemeForm(DFForm):
+    themes = [
+        ('theme-dark-red', 'Dark Red'),
+        ('theme-dark-blue', 'Dark Blue'),
+        ('theme-light-red', 'Light Red'),
+        ('theme-light-blue', 'Light Blue'),
+    ]
+    theme = forms.ChoiceField(widget=forms.RadioSelect, choices=themes)

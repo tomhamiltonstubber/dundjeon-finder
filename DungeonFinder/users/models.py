@@ -29,6 +29,7 @@ class User(AbstractUser):
     email = models.EmailField('Email Address', unique=True)
     first_name = models.CharField('First name', max_length=30, blank=True)
     last_name = models.CharField('Last name', max_length=150, blank=True)
+    user_theme = models.CharField('Theme', max_length=150, blank=True)
     last_logged_in = models.DateTimeField(
         'Last Logged in', default=datetime(2020, 1, 1, tzinfo=timezone.utc), editable=False
     )

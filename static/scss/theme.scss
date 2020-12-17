@@ -1,9 +1,81 @@
-.theme-green{
-    .btn{
-        background-image: -webkit-linear-gradient(top, #3df66d, #0b942f);
-    }
-    h1,h2,h3,h4,
-    .text-red-600{
-        color: #0b942f;
+$dark_themes: (
+    "dark-red": #b91c1b, 
+    "dark-green": green, 
+    "dark-blue": blue, 
+    "dark-gold": gold
+    );
+
+$light_themes: (
+    "light-red": #b91c1b,
+    "light-green": green, 
+    "light-blue": blue, 
+    "light-gold": gold
+);
+
+
+@each $theme, $colour in $dark_themes {
+    .theme-#{$theme}{
+        .text-red-600{
+            color: $colour;
+        }
+
+        .theme-bg,
+        .bg-red-700{
+            background: $colour;
+        }
+    
+        .theme-option.selected{
+            border-color: $colour;
+        }
+
+        .btn{
+            background-image: -webkit-linear-gradient(top, $colour, darken($colour, 6%));
+        }
     }
 }
+
+@each $theme, $colour in $light_themes {
+    .theme-#{$theme}{
+        background: #fdecc7;
+        color: #333;
+
+        nav{
+            background-color: #e7d4a9;
+
+            .logo{
+                background-image: url(../img/nav-shield-invert.png);
+            }
+        }
+
+        .text-red-600{
+            color: $colour;
+        }
+
+        .theme-bg,
+        .bg-red-700{
+            background: $colour;
+        }
+    
+        .theme-option.selected{
+            border-color: $colour;
+        }
+
+        .btn{
+            background-image: -webkit-linear-gradient(top, $colour, darken($colour, 6%));
+        }
+    }
+}
+
+
+// Theme Selection //
+
+.theme-option {
+    border: 5px solid #444;
+    padding: 5px;
+    cursor: pointer;
+
+    &:hover{
+        border-color: #fff;
+    }
+}
+

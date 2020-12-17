@@ -49,3 +49,17 @@ const init_games_list = () => {
     })
   }
 }
+
+$(".theme-option").on("click", function(){
+  var $theme = $(this).data("theme");
+
+  // Remove previous theme class from body and add new
+  $("body").removeClass (function (index, css) {
+    return (css.match (/(^|\s)theme-\S+/g) || []).join(' ');
+  });
+  $("body").addClass($theme);
+
+  // Add selected to new theme option and remove from previous
+  $(".theme-option.selected").removeClass("selected");
+  $(this).addClass("selected");
+});
