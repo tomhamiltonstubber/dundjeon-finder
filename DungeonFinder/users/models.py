@@ -52,6 +52,9 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.screen_name}'
+    
+    def initials(self):
+        return f'{self.first_name[0]}{self.last_name[0]}'
 
     @property
     def is_gm(self):
