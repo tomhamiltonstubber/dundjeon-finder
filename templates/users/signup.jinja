@@ -3,7 +3,10 @@
 {% block content %}
 <section class="pb-20 pt-20 px-4 text-center text-white flex items-center">
   <div class="w-full max-w-2xl mx-auto">
-    <h2 class="text-4xl mt-2 leading-tight font-heading">Create Account</h2>
+    <h1 class="text-4xl mt-2 leading-tight font-heading">Create Account</h1>
+    {% if request.GET.get("campaign") %}
+      <h2 class="text-2xl mt-6 text-gray-400">{{request.GET.get('campaign')}} is waiting<h2>
+    {% endif %}
     <div class="w-full max-w-xl mx-auto py-10">
     <form method="post" class="bg-white text-black">
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
