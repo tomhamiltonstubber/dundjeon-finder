@@ -1,15 +1,24 @@
-<ul class="flex items-center text-xs" style="height: 50px;">
- <li class="block lg:inline-block mr-4">
-    <a href="{{ url('avail-campaign-list')}}" class="bg-gray-700 block border-r-8 p-2 px-5 rounded text-white">View Games</a>
+<ul class="flex items-center text-sm">
+   <li class="block lg:inline-block mr-2">
+    <a href="{{ url('avail-campaign-list')}}" class="block border-r-8 p-2 px-5 rounded">Search</a>
   </li>
-  <li class="block lg:inline-block mr-4">
-    <a href="/login" class="bg-gray-700 block border-r-8 p-2 px-5 rounded text-white">Host Game</a>
+   <li class="block lg:inline-block mr-2">
+    <a href="/" class="block border-r-8 p-2 px-5 rounded">Campaigns</a>
   </li>
-<li class="block lg:inline-block relative">
-    <label for="user-menu-toggle">
-        <span class="rounded-full h-8 w-8 bg-white flex items-center justify-center text-sm bg-red-700 text-white"> 
-          {{ user.initials() }}
-        </span>
+  <li class="block lg:inline-block mr-">
+    <a href="/login" class="block border-r-8 p-2 px-5 rounded">Profile</a>
+  </li>
+</ul>
+<div class="flex items-center">
+<div class="relative">
+     <label class="ml-5 flex items-center" for="user-menu-toggle">
+      <span class="rounded-full h-8 w-8 bg-white flex items-center justify-center text-sm bg-red-700 mr-2"> 
+        <img src="/static/img/profile.png">
+        {# User profile picture to be added here #}
+      </span>
+      <span class="text-xs">
+        {{user | lower}}
+      </span>
     </label>
     <input type="checkbox" name="user-menu-toggle" id="user-menu-toggle" class="hidden">
     <div id="user-menu" class="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
@@ -22,6 +31,5 @@
         </a>
       </form>
     </div>
-  </div>
-</li>
-</ul>
+  </div>  </div>
+</div>

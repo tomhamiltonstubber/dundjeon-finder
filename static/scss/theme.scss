@@ -45,6 +45,10 @@ $light_themes: (
             .logo{
                 background-image: url(../img/nav-shield-invert.png);
             }
+            
+            svg{
+                fill: #000;
+             }
         }
 
         .text-red-600{
