@@ -1,17 +1,15 @@
 .camp-story{
     p::first-letter {
     font-size: 200%;
-    color: #f23b3c;
   }
 }
 
 #campaigns-loading-screen{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #0f1722;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   transition: opacity 0.5s linear;
   z-index: 10;
   opacity: 0;

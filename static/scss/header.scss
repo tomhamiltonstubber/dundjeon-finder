@@ -1,5 +1,4 @@
 nav{
-    background: #1a202e;
     border-bottom: 1px solid rgb(142 130 130 / 26%);
     height: 50px;
     overflow: visible;
@@ -7,20 +6,29 @@ nav{
 
 nav .logo{
 	background-image: url(../img/nav-shield.png);
-    height: 100px;
+    height: 101px;
     width: 100px;
     background-size: cover;
     background-position: bottom;
-}
+    font-weight: 600;
 
-nav .logo:hover{
-    opacity: 1;
-}
+    svg{
+        transform: rotate(45deg);
+    }
 
-.invert nav{
-    background-color: #fdecc7;
-}
+    svg:last-of-type{
+        display: none;
+    }
 
+    &:hover{
+        svg:first-of-type{
+            display: none;
+        }
+        svg:last-of-type{
+            display: block;
+        }
+    }
+}
 
 nav{
     #user-menu{

@@ -54,7 +54,7 @@ $(".alert").on("click", function(){
   $(this).fadeOut();
   setTimeout(function(){
       $(this).remove();
-  }, 1000)
+  }, 3000)
 });
 
 $(".theme-option").on("click", function(){
