@@ -2,7 +2,7 @@
   <head>
     <link rel="stylesheet" href="{{ static('/dist/main.css') }}" crossorigin="anonymous">
   </head>
-  <body class="{{user.user_theme}}">
+  <body class="{% if user.is_authenticated %}{{user.user_theme}}{% else %} theme-dark-red {% endif %}">
     {% include '/partials/header.jinja' %}
     {% include '/partials/alerts.jinja' %}
     {% block content %}{% endblock %}

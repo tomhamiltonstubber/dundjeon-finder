@@ -19,9 +19,16 @@ $light_themes: (
             color: $colour;
         }
 
-        .theme-bg,
-        .bg-red-700{
-            background: $colour;
+        .bg-light{
+            background: #1a202e;
+        }
+
+        .bg-dark{
+            background-color: #1a202e;
+        }
+
+        .bg-theme{
+            background-color: $colour;
         }
     
         .theme-option.selected{
@@ -39,9 +46,19 @@ $light_themes: (
         background: #fdecc7;
         color: #333;
 
-        nav{
-            background-color: #e7d4a9;
+        .bg-light{
+            background: #fdecc7;
+        }
 
+        .bg-dark{
+            background-color: #e7d4a9;
+        }
+
+        .bg-theme{
+            background-color: $colour;
+        }
+
+        nav{        
             .logo{
                 background-image: url(../img/nav-shield-invert.png);
             }
@@ -51,13 +68,12 @@ $light_themes: (
              }
         }
 
-        .text-red-600{
-            color: $colour;
+        .hr-icon{
+            filter: invert(1);
         }
 
-        .theme-bg,
-        .bg-red-700{
-            background: $colour;
+        .hr-text:after{
+            background: #fdecc7;
         }
     
         .theme-option.selected{
