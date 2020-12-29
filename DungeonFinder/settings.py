@@ -223,7 +223,7 @@ RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', '6LeIxAcTAAAAAGG-vFI1
 #   Redis and RQ
 # =======================
 
-redis_url = urlparse(os.getenv('REDISCLOUD_URL', 'redis://localhost:6379'))
+redis_url = urlparse(os.getenv('REDIS_URL', 'redis://localhost:6379'))
 redis_db = os.getenv('REDIS_DB', '0')
 redis_connections = int(os.getenv('REDIS_CONNECTIONS', '50'))
 CACHES = {

@@ -14,10 +14,6 @@ class Command(CSBaseCommand):
         if dist_dir.exists():
             print('deleting dist dir {}'.format(dist_dir))
             shutil.rmtree(str(dist_dir))
-        self.run('yarn', 'run', 'main')
+        print('\nRunning {}...'.format('yarn run main'))
+        subprocess.run(['yarn', 'run', 'main'], check=True)
         return super().collect()
-
-    @staticmethod
-    def run(*args):
-        print('\nRunning {}...'.format(' '.join(args)))
-        subprocess.run(args, check=True)
