@@ -1,4 +1,3 @@
-import logging
 import os
 from urllib.parse import urlparse
 
@@ -54,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'DungeonFinder.common.middleware.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'DungeonFinder.urls'
@@ -260,7 +258,3 @@ try:
     from localsettings import *  # noqa
 except ImportError:
     pass
-
-logger = logging.getLogger('df.settings')
-print('Loading settings')
-logger.info('Loading settings')
