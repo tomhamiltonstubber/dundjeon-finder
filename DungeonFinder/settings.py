@@ -13,7 +13,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'TEST_SECRET')
 DEBUG = os.getenv('DEBUG', True)
 LIVE = os.getenv('LIVE')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 ON_HEROKU = 'DYNO' in os.environ
 
 
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'captcha',
     'django_rq',
+    'django_extensions',
     'DungeonFinder.games',
     'DungeonFinder.users',
     'DungeonFinder.common',
@@ -194,7 +195,7 @@ LOGGING = {
         'null': {'class': 'logging.NullHandler'},
         'sentry': {'level': 'WARNING', 'class': 'sentry_sdk.integrations.logging.EventHandler'},
         'django.server': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'django.server'},
-        'df': {
+        'df_console': {
             'level': 'DEBUG' if DEBUG else 'INFO',
             'class': 'DungeonFinder.streamhandler.StreamHandler',
             'formatter': 'df',
@@ -202,8 +203,8 @@ LOGGING = {
     },
     'loggers': {
         'django.server': {'handlers': ['django.server'], 'level': 'INFO', 'propagate': False},
-        'django': {'handlers': ['debug_console'], 'level': 'INFO'},
-        'df': {'handlers': ['df', 'sentry'], 'level': 'DEBUG', 'propagate': False},
+        'django': {'handlers': ['debug_console'], 'level': 'DEBUG' if DEBUG else 'INFO'},
+        'df': {'handlers': ['df_console', 'sentry'], 'level': 'DEBUG', 'propagate': False},
         'django.security': {'handlers': ['sentry', 'debug_console'], 'level': 'ERROR', 'propagate': False},
         'django.security.DisallowedHost': {'handlers': ['null'], 'propagate': False},
         'sentry.errors': {'level': 'WARNING', 'handlers': ['debug_console'], 'propagate': False},
@@ -223,7 +224,7 @@ RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', '6LeIxAcTAAAAAGG-vFI1
 #   Redis and RQ
 # =======================
 
-redis_url = urlparse(os.getenv('REDISCLOUD_URL', 'redis://localhost:6379'))
+redis_url = urlparse(os.getenv('REDIS_URL', 'redis://localhost:6379'))
 redis_db = os.getenv('REDIS_DB', '0')
 redis_connections = int(os.getenv('REDIS_CONNECTIONS', '50'))
 CACHES = {
