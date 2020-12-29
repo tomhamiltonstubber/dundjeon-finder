@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'DungeonFinder.common.middleware.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'DungeonFinder.urls'
@@ -165,8 +166,8 @@ STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_URL = '/static/'
 
-if sentry_dsn := os.getenv('SENTRY_DSN'):
-    sentry_sdk.init(dsn=sentry_dsn, integrations=[DjangoIntegration()], send_default_pii=True)
+# if sentry_dsn := os.getenv('SENTRY_DSN'):
+#     sentry_sdk.init(dsn=sentry_dsn, integrations=[DjangoIntegration()], send_default_pii=True)
 
 
 # =======================
