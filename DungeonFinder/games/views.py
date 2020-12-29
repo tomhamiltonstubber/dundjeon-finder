@@ -1,5 +1,3 @@
-import logging
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
@@ -15,9 +13,6 @@ from DungeonFinder.common.views import DFCreateView, DFEditView
 from DungeonFinder.games.forms import CampaignsFilterForm
 from DungeonFinder.games.models import Campaign
 from DungeonFinder.users.views import GMRequestMixin
-
-
-logger = logging.getLogger('df.views')
 
 
 def index(request):
