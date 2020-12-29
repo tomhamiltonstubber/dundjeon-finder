@@ -1,3 +1,5 @@
+import random
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
@@ -13,6 +15,17 @@ from DungeonFinder.common.views import DFCreateView, DFEditView
 from DungeonFinder.games.forms import CampaignsFilterForm
 from DungeonFinder.games.models import Campaign
 from DungeonFinder.users.views import GMRequestMixin
+
+def not_found(request):
+    options = [
+        ["You took a wrong turn", 1],
+        ["You rolled a natural one", 2],
+        ["You are not a wise wizard", 3]
+    ]
+
+    option = random.choice(options)
+
+    return render(request, '404.jinja', {'title': option[0], 'image': option[1] })
 
 
 def index(request):
