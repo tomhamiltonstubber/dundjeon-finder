@@ -15,6 +15,7 @@ class Command(CSBaseCommand):
             print('deleting dist dir {}'.format(dist_dir))
             shutil.rmtree(str(dist_dir))
         self.run('yarn', 'run', 'main')
+        return super().collect()
 
     @staticmethod
     def run(*args):
