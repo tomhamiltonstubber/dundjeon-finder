@@ -14,3 +14,4 @@ django-rq==2.4.0
 markdown==3.3.3
 libsass==0.20.1
 boto3==1.16.35
+jedi==0.17.2
