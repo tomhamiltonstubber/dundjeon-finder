@@ -14,6 +14,7 @@ DEBUG = os.getenv('DEBUG', True)
 LIVE = os.getenv('LIVE')
 
 ALLOWED_HOSTS = ['*']
+INTERNAL_IPS = ['127.0.0.1', 'localhost']
 ON_HEROKU = 'DYNO' in os.environ
 
 
