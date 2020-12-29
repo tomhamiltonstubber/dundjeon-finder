@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    None if TESTING else 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -150,7 +150,6 @@ AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', 'dungeon-finder')
 AWS_PUBLIC_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', 'dungeon-finder-public')
 AWS_REGION = os.getenv('AWS_REGION', 'eu-west-2')
 AWS_STATIC_LOCATION = 'static'
-USE_BUNDLED_STATICS = ON_HEROKU
 
 
 # =======================
@@ -165,8 +164,11 @@ SEND_EMAILS = True
 # =======================
 
 STATIC_ROOT = 'staticfiles'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_URL = '/static/'
+STATIC_HOST = os.getenv('STATIC_HOST', BASE_URL)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_URL = STATIC_HOST + '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+USE_BUNDLED_STATICS = ON_HEROKU
 
 if sentry_dsn := os.getenv('SENTRY_DSN'):
     sentry_sdk.init(dsn=sentry_dsn, integrations=[DjangoIntegration()], send_default_pii=True)
