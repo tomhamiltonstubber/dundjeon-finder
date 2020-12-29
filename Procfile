@@ -1,1 +1,1 @@
-web: gunicorn DungeonFinder.asgi
+web: gunicorn DungeonFinder.wsgi
