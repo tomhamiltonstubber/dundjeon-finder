@@ -203,7 +203,7 @@ LOGGING = {
     },
     'loggers': {
         'django.server': {'handlers': ['django.server'], 'level': 'INFO', 'propagate': False},
-        'django': {'handlers': ['debug_console'], 'level': 'INFO'},
+        'django': {'handlers': ['debug_console'], 'level': 'DEBUG' if DEBUG else 'INFO'},
         'df': {'handlers': ['df_console', 'sentry'], 'level': 'DEBUG', 'propagate': False},
         'django.security': {'handlers': ['sentry', 'debug_console'], 'level': 'ERROR', 'propagate': False},
         'django.security.DisallowedHost': {'handlers': ['null'], 'propagate': False},
