@@ -171,6 +171,17 @@ if sentry_dsn := os.getenv('SENTRY_DSN'):
 #   Logging
 # =======================
 
+ADMINS = (('Tom Hamilton Stubber', 'tomhamiltonstubber@gmail.com'),)
+if ON_HEROKU:  # pragma: no cover
+    # Use SMTP gmail backend for admins emails so it doesn't suffer
+    # from any problems with Mandrill, eg. testing mode or exceeding quota.
+    EMAIL_USE_TLS = True
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = 'dungeonfinder.errors@gmail.com'
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
