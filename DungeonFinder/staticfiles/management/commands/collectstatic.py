@@ -3,13 +3,13 @@ import subprocess
 from pathlib import Path
 
 from django.conf import settings
-from django.core.management import BaseCommand
+from django.contrib.staticfiles.management.commands.collectstatic import Command as CSBaseCommand
 
 
-class Command(BaseCommand):
-    help = 'run rollup to build js files'
+class Command(CSBaseCommand):
+    help = 'Build JS and SCSS'
 
-    def handle(self, **kwargs):
+    def collect(self, **kwargs):
         dist_dir = (Path(settings.DJ_DIR) / 'static/dist').resolve()
         if dist_dir.exists():
             print('deleting dist dir {}'.format(dist_dir))
