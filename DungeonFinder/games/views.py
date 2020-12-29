@@ -21,6 +21,7 @@ logger = logging.getLogger('df.views')
 
 
 def index(request):
+    raise AssertionError()
     try:
         if request.user.is_authenticated:
             return render(request, 'users/dashboard.jinja')
