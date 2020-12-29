@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
@@ -15,10 +17,17 @@ from DungeonFinder.games.models import Campaign
 from DungeonFinder.users.views import GMRequestMixin
 
 
+logger = logging.getLogger('df.views')
+
+
 def index(request):
-    if request.user.is_authenticated:
-        return render(request, 'users/dashboard.jinja')
-    return render(request, 'index.jinja')
+    try:
+        if request.user.is_authenticated:
+            return render(request, 'users/dashboard.jinja')
+        return render(request, 'index.jinja')
+    except Exception as e:
+        logging.error(e, exc_info=e)
+        raise
 
 
 def campaign_available_list_data(request):
