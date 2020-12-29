@@ -13,6 +13,7 @@ install-dev: install
 .PHONY: install-others
 install-others:
 	yarn install
+	./manage.py collectstatic --noinput --verbosity 0
 
 .PHONY: format
 format:

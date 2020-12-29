@@ -14,6 +14,7 @@ DEBUG = os.getenv('DEBUG', True)
 LIVE = os.getenv('LIVE')
 
 ALLOWED_HOSTS = ['*']
+INTERNAL_IPS = ['127.0.0.1', 'localhost']
 ON_HEROKU = 'DYNO' in os.environ
 
 
@@ -21,6 +22,7 @@ def env_true(var_name, alt='FALSE'):
     return os.getenv(var_name, alt).upper() in {'1', 'TRUE'}
 
 
+TESTING = os.getenv('TESTING')
 BASE_URL = os.getenv('BASE_URL', 'http://localhost:8000')
 
 # Application definition
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    None if TESTING else 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -146,6 +149,7 @@ AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY', '')
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', 'dungeon-finder')
 AWS_PUBLIC_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', 'dungeon-finder-public')
 AWS_REGION = os.getenv('AWS_REGION', 'eu-west-2')
+AWS_STATIC_LOCATION = 'static'
 
 
 # =======================
@@ -160,8 +164,11 @@ SEND_EMAILS = True
 # =======================
 
 STATIC_ROOT = 'staticfiles'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_URL = '/static/'
+STATIC_HOST = os.getenv('STATIC_HOST', BASE_URL)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_URL = STATIC_HOST + '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+USE_BUNDLED_STATICS = ON_HEROKU
 
 if sentry_dsn := os.getenv('SENTRY_DSN'):
     sentry_sdk.init(dsn=sentry_dsn, integrations=[DjangoIntegration()], send_default_pii=True)
@@ -170,6 +177,17 @@ if sentry_dsn := os.getenv('SENTRY_DSN'):
 # =======================
 #   Logging
 # =======================
+
+ADMINS = (('Tom Hamilton Stubber', 'tomhamiltonstubber@gmail.com'),)
+if ON_HEROKU:  # pragma: no cover
+    # Use SMTP gmail backend for admins emails so it doesn't suffer
+    # from any problems with Mandrill, eg. testing mode or exceeding quota.
+    EMAIL_USE_TLS = True
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = 'dungeonfinder.errors@gmail.com'
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 LOGGING = {
     'version': 1,
