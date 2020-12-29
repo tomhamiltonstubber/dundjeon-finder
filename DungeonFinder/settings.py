@@ -1,3 +1,4 @@
+import logging
 import os
 from urllib.parse import urlparse
 
@@ -258,3 +259,7 @@ try:
     from localsettings import *  # noqa
 except ImportError:
     pass
+
+logger = logging.getLogger('df.settings')
+print('Loading settings')
+logger.info('Loading settings')

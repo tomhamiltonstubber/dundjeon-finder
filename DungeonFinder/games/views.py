@@ -21,14 +21,9 @@ logger = logging.getLogger('df.views')
 
 
 def index(request):
-    raise AssertionError()
-    try:
-        if request.user.is_authenticated:
-            return render(request, 'users/dashboard.jinja')
-        return render(request, 'index.jinja')
-    except Exception as e:
-        logging.error(e, exc_info=e)
-        raise
+    if request.user.is_authenticated:
+        return render(request, 'users/dashboard.jinja')
+    return render(request, 'index.jinja')
 
 
 def campaign_available_list_data(request):
