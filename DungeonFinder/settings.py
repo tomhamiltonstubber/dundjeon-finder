@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'captcha',
     'django_rq',
+    'django_extensions',
     'DungeonFinder.games',
     'DungeonFinder.users',
     'DungeonFinder.common',
