@@ -8,5 +8,8 @@
     {% block content %}{% endblock %}
     {% include 'partials/footer.jinja' %}
     <script src="{{ js_path('main') }}"></script>
+    <form id="post-form" method="POST" class="hidden">
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    </form>
   </body>
 </html>

@@ -1,6 +1,20 @@
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Q, QuerySet
 from django.urls import reverse
+
+
+class CampaignQueryset(QuerySet):
+    def request_joined_qs(self, request, as_player=False):
+        if not request.user.is_authenticated:
+            return self.none()
+        elif request.user.is_admin:
+            return self.all()
+        else:
+            query = Q(players=request.user)
+            if as_player and request.user.is_gm:
+                query |= Q(creator=request.user.is_gm)
+            return self.filter(query)
 
 
 class Campaign(models.Model):
@@ -29,6 +43,8 @@ class Campaign(models.Model):
     RP_LIGHT = 'light'
     RP_CHOICES = ((RP_ANY, 'Any'), (RP_LIGHT, 'light'), (RP_HEAVY, 'heavy'))
 
+    objects = CampaignQueryset.as_manager()
+
     name = models.CharField(max_length=255)
 
     accepting_players = models.BooleanField(default=True)
@@ -51,10 +67,7 @@ class Campaign(models.Model):
         return self.name
 
     def game_full(self):
-        if self.players.count() == self.max_players:
-            return True
-        else:
-            return False
+        return self.players.count() >= self.max_players
 
     def get_absolute_url(self):
         return reverse('campaign-details', kwargs={'pk': self.pk})

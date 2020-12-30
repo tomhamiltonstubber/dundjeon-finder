@@ -65,20 +65,24 @@ class AvailCampaignsListView(ListView):
 available_campaigns_list = AvailCampaignsListView.as_view()
 
 
-class CampaignDetails(DetailView):
+class CampaignDetailsJoined(DetailView):
     model = Campaign
     template_name = 'games/camp-details.jinja'
-
-    def get_context_data(self, **kwargs):
-        camp = self.get_object()
-        game_details_visible = self.request.user.is_authenticated and (
-            self.request.user.id in self.get_object().players.values_list('id', flat=True)
-            or (self.request.user.is_gm and camp.creator_id == self.request.user.gamemaster.id)
-        )
-        return super().get_context_data(game_details_visible=game_details_visible, **kwargs)
+    part_of_game = True
 
 
-campaign_details = CampaignDetails.as_view()
+class CampaignDetailsNotJoined(DetailView):
+    model = Campaign
+    template_name = 'games/camp-details.jinja'
+    part_of_game = False
+
+
+def campaign_details(request, pk):
+    campaigns = Campaign.objects.request_joined_qs(request).values_list('pk', flat=True)
+    if pk in campaigns:
+        return CampaignDetailsJoined.as_view()(request, pk=pk)
+    else:
+        return CampaignDetailsNotJoined.as_view()(request, pk=pk)
 
 
 class CampaignUpdateMixin(GMRequestMixin):
@@ -143,3 +147,12 @@ def campaign_join(request, pk):
     camp.players.add(request.user)
     messages.success(request, "You've joined this game. Have fun!")
     return redirect(camp.get_absolute_url())
+
+
+@require_POST
+@login_required(login_url='/signup/')
+def campaign_leave(request, pk):
+    camp = get_object_or_404(Campaign.objects.request_joined_qs(request, as_player=True), pk=pk)
+    camp.players.remove(request.user)
+    messages.success(request, "You've left this game. Hope you get a new one!")
+    return redirect('avail-campaign-list')
