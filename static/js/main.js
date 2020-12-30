@@ -1,14 +1,16 @@
 import $ from 'jquery'
 import '../scss/main.scss'
 import 'tailwindcss/tailwind.css'
-import games_list from '../js/templates/games_list.njk'
+import campaigns_list from '../js/templates/campaigns_list.njk'
 import {confirm_modal} from './modals'
+import {init_messages, render_messages} from "./messaging";
 
 window.$ = window.jQuery = $
 
 $(document).ready(() => {
-  init_games_list()
+  init_campaigns_list()
   menu()
+  init_campaign_messages()
 })
 
 const menu = () => {
@@ -26,7 +28,7 @@ const menu = () => {
   })
 }
 
-const init_games_list = () => {
+const init_campaigns_list = () => {
   const $filter_form = $('#filter_form')
   const $campaigns_list = $('#campaigns-list')
   const $loading_screen = $('#campaigns-loading-screen')
@@ -36,8 +38,8 @@ const init_games_list = () => {
       const form_data = $filter_form.serialize()
       $.get($campaigns_list.data('camps-data-url') + '?' + form_data)
         .done(data => {
-          const $games_list_html = games_list.render({games_data: data})
-          $campaigns_list.html($games_list_html).show()
+          const $camps_list_html = campaigns_list.render({games_data: data})
+          $campaigns_list.html($camps_list_html).show()
           setTimeout(function () {
             $loading_screen.removeClass('active')
           }, 500)
@@ -47,6 +49,24 @@ const init_games_list = () => {
     $('#games-filter-form input, #games-filter-form select').on('change', function(event) {
       $loading_screen.addClass('active')
       update_games_list()
+    })
+  }
+}
+
+const init_campaign_messages = () => {
+  const $messages = $('#messages')
+  if ($messages.length) {
+    init_messages()
+    const $form = $('#create-message-form')
+    $form.submit(function (e) {
+      e.preventDefault()
+      const form_data = $form.serialize()
+      $('#id_text').val('')
+      $('#message-submit').attr('disabled', true).addClass('disabled')
+      $.post($form.attr('action'), form_data).done(data => {
+        render_messages(data['last_id'])
+        $('#message-submit').removeAttr('disabled', true).removeClass('disabled')
+      })
     })
   }
 }

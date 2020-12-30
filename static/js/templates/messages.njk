@@ -1,0 +1,10 @@
+{% for msg in messages | reverse %}
+  <div class="comment-container">
+    <div class="author d-flex">
+      <div class="w-100">
+        <span>{{ msg.author | escape }} - {{ msg.timestamp }}</span>
+        <div class="message w-100"><p>{{ msg.text | escape }}</p></div>
+      </div>
+    </div>
+  </div>
+{% endfor %}

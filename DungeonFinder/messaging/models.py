@@ -1,3 +1,5 @@
+from html import escape
+
 from django.db import models
 from django.db.models import QuerySet
 
@@ -34,9 +36,10 @@ class Message(models.Model):
 
     def get_list_data(self):
         return {
-            'text': self.text,
+            'id': self.id,
+            'text': escape(self.text),
             'timestamp': self.timestamp.strftime('%Y-%m-%dT%H:%M'),
-            'author': str(self.author),
+            'author': escape(self.author.screen_name),
             'gm_message': self.author.is_gm,
         }
 

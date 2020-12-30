@@ -90,7 +90,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'DungeonFinder.wsgi.application'
 
-
 # =======================
 #  Database
 # =======================

@@ -10,4 +10,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('DungeonFinder.users.urls')),
     path('', include('DungeonFinder.games.urls')),
+    path('', include('DungeonFinder.messaging.urls')),
 ]

@@ -1,3 +1,5 @@
+from html import escape
+
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q, QuerySet
@@ -74,9 +76,9 @@ class Campaign(models.Model):
 
     def get_list_data(self):
         return {
-            'name': self.name,
+            'name': escape(self.name),
             'link': self.get_absolute_url(),
             'free_spaces': self.free_spaces,  # This has been annotated onto the queryset
-            'description': self.description,
+            'description': escape(self.description),
             'price_per_session': self.price_per_session,
         }
