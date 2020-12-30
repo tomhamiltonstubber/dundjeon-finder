@@ -16,9 +16,14 @@ from DungeonFinder.users.views import GMRequestMixin
 
 
 def index(request):
+    meta_data = {
+        'meta_title': "Find Dungeons & Dragons Games",
+        'meta_description': "The online dungeons and dragons search engine"
+    }
+
     if request.user.is_authenticated:
         return render(request, 'users/dashboard.jinja')
-    return render(request, 'index.jinja')
+    return render(request, 'index.jinja', meta_data)
 
 
 def campaign_available_list_data(request):

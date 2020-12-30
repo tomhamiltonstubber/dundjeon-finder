@@ -1,5 +1,7 @@
 <html>
   <head>
+    {% include 'partials/seo.jinja' %}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{{ static('/dist/main.css') }}" crossorigin="anonymous">
   </head>
   <body class="{% if user.is_authenticated %}{{user.user_theme}}{% else %} theme-dark-red {% endif %}">
