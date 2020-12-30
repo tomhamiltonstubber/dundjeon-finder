@@ -214,14 +214,14 @@ LOGGING = {
         'sentry': {'level': 'WARNING', 'class': 'sentry_sdk.integrations.logging.EventHandler'},
         'django.server': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'django.server'},
         'df_console': {
-            'level': 'DEBUG' if DEBUG else 'INFO',
+            'level': 'INFO',
             'class': 'DungeonFinder.streamhandler.StreamHandler',
             'formatter': 'df',
         },
     },
     'loggers': {
         'django.server': {'handlers': ['django.server'], 'level': 'INFO', 'propagate': False},
-        'django': {'handlers': ['debug_console'], 'level': 'DEBUG' if DEBUG else 'INFO'},
+        'django': {'handlers': ['debug_console'], 'level': 'INFO'},
         'df': {'handlers': ['df_console', 'sentry'], 'level': 'DEBUG', 'propagate': False},
         'django.security': {'handlers': ['sentry', 'debug_console'], 'level': 'ERROR', 'propagate': False},
         'django.security.DisallowedHost': {'handlers': ['null'], 'propagate': False},

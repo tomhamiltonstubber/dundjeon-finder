@@ -1,12 +1,10 @@
-import random
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.db.models import Count, F
 from django.forms import modelform_factory
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 
@@ -15,23 +13,6 @@ from DungeonFinder.common.views import DFCreateView, DFEditView
 from DungeonFinder.games.forms import CampaignsFilterForm
 from DungeonFinder.games.models import Campaign
 from DungeonFinder.users.views import GMRequestMixin
-
-def not_found(request):
-    options = [
-        ["You took a wrong turn", 1],
-        ["You rolled a natural one", 2],
-        ["You are not a wise wizard", 3]
-    ]
-
-    option = random.choice(options)
-
-    return render(request, '404.jinja', {'title': option[0], 'image': option[1] })
-
-
-def index(request):
-    if request.user.is_authenticated:
-        return render(request, 'users/dashboard.jinja')
-    return render(request, 'index.jinja')
 
 
 def campaign_available_list_data(request):
