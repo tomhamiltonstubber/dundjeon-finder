@@ -65,7 +65,13 @@ class AvailCampaignsListView(ListView):
 available_campaigns_list = AvailCampaignsListView.as_view()
 
 
-class CampaignDetailsJoined(DetailView):
+class CampaignDetailsForGM(DetailView):
+    model = Campaign
+    template_name = 'games/camp-details.jinja'
+    part_of_game = True
+
+
+class CampaignDetailsForPlayer(DetailView):
     model = Campaign
     template_name = 'games/camp-details.jinja'
     part_of_game = True
@@ -80,7 +86,10 @@ class CampaignDetailsNotJoined(DetailView):
 def campaign_details(request, pk):
     campaigns = Campaign.objects.request_joined_qs(request).values_list('pk', flat=True)
     if pk in campaigns:
-        return CampaignDetailsJoined.as_view()(request, pk=pk)
+        if request.user.is_gm:
+            return CampaignDetailsForGM.as_view()(request, pk=pk)
+        else:
+            return CampaignDetailsForPlayer.as_view()(request, pk=pk)
     else:
         return CampaignDetailsNotJoined.as_view()(request, pk=pk)
 
