@@ -17,8 +17,8 @@ from DungeonFinder.users.views import GMRequestMixin
 
 def index(request):
     meta_data = {
-        'meta_title': "Find Dungeons & Dragons Games",
-        'meta_description': "The online dungeons and dragons search engine"
+        'meta_title': 'Find Dungeons & Dragons Games',
+        'meta_description': 'The online dungeons and dragons search engine'
     }
 
     if request.user.is_authenticated:
