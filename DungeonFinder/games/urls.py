@@ -11,4 +11,5 @@ urlpatterns = [
     path('campaigns/<int:pk>/change-status/', views.campaign_change_status, name='campaign-change-status'),
     path('campaigns/<int:pk>/delete/', views.campaign_delete, name='campaign-delete'),
     path('campaigns/<int:pk>/join/', views.campaign_join, name='campaign-join'),
+    path('campaigns/<int:pk>/leave/', views.campaign_leave, name='campaign-leave'),
 ]

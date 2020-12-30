@@ -28,7 +28,11 @@ def js_path(name):  # pragma: no cover
         return _js_path(name)
 
 
+def _reverse(rurl, **kwargs):
+    return reverse(rurl, kwargs=kwargs)
+
+
 def environment(**options):
     env = Environment(**options)
-    env.globals.update({'static': static, 'url': reverse, 'js_path': js_path})
+    env.globals.update({'static': static, 'url': _reverse, 'js_path': js_path})
     return env
