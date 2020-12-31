@@ -100,6 +100,7 @@ class CampaignUpdateMixin(GMRequestMixin):
 
 
 class CampaignCreate(CampaignUpdateMixin, DFCreateView):
+    template_name = 'games/camp-create.jinja'
     form_class = modelform_factory(model=Campaign, form=DFModelForm, fields='__all__')
 
     def form_valid(self, form):

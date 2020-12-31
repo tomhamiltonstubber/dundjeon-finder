@@ -8,21 +8,39 @@
 				<div class="hr-icon">
 					<img src="/static/img/helmet.svg" alt="">
 				</div>
-				<hr class="hr-text text-xl leading-7" data-content="Campaigns">
-			<table class="w-full">
+				<hr class="hr-text text-xl leading-7" data-content="Joined Campaigns">
 				{% if user.campaigns.count() == 0 %}
 					<div class="text-center">
 						<h2 class="mb-6">You haven't joined any games yet, click here to view all games.</h2>
 						<a href="{{ url('avail-campaign-list')}}" class="btn">View Games</a>
 					</div>
 				{% else %}
-				    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3 pb-20 px-10">
-				{% for camp in user.campaigns.all() %}
-					{% include "/partials/camp_list.jinja" %}
-				{% endfor %}
+					<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3 pb-20 px-10">
+					{% for camp in user.campaigns.all() %}
+						{% include "/partials/camp_list.jinja" %}
+					{% endfor %}
+					</div>
 				{% endif %}
-				</tbody>
-			</table>
+			</div>
+			<div class="mb-10">
+				<div class="hr-icon">
+					<img src="/static/img/helmet.svg" alt="">
+				</div>
+				<hr class="hr-text text-xl leading-7" data-content="Hosted Campaigns">
+				<div class="text-center">
+				{% if user.gamemaster.campaign_set.all().count() == 0 %}
+					<h2 class="mb-6">You haven't created any games yet, click here to view all games.</h2>
+					<a href="{{ url('avail-campaign-list')}}" class="btn">Search Games</a>
+				{% else %}
+					<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3 pb-20 px-10">
+					{% for camp in user.gamemaster.campaign_set.all() %}
+						{% include "/partials/camp_list.jinja" %}
+					{% endfor %}
+					</div>
+					<a href="{{ url('campaign-create')}}" class="btn">Create Campaign</a>
+				{% endif %}
+				</div>
+			</div>
 		</div>
 	</div>
 </section>
