@@ -67,7 +67,7 @@ available_campaigns_list = AvailCampaignsListView.as_view()
 
 class CampaignDetailsForGM(DetailView):
     model = Campaign
-    template_name = 'games/camp-details.jinja'
+    template_name = 'games/gm-camp-details.jinja'
     part_of_game = True
 
 
