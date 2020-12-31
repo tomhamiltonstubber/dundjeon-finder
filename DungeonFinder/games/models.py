@@ -14,7 +14,7 @@ class CampaignQueryset(QuerySet):
             return self.all()
         else:
             query = Q(players=request.user)
-            if as_player and request.user.is_gm:
+            if not as_player and request.user.is_gm:
                 query |= Q(creator=request.user.is_gm)
             return self.filter(query)
 

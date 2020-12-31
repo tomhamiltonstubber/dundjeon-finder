@@ -10,7 +10,7 @@
           <h2 class="text-3xl mt-2 leading-tight font-heading text-gradient">{{campaign.name}}</h2>
         </div>
       </div>
-      <div class="mt-6 flex flex-col-reverse justify-stretch space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3">
+      <div class="mt-6 flex space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-x-reverse sm:space-y-0 sm:space-x-3 md:mt-0 md:flex-row md:space-x-3 text-xs">
         <a href="{{ url('campaign-delete', pk=campaign.id) }}"
         data-method="POST"
         data-confirm="Are you sure you want to delete this campaign? All players will receive a notification telling them the Campaign has been deleted."
@@ -104,7 +104,7 @@
           {% for player in campaign.players.all() %}
           <li class="mt-6">
             <div class="flex items-center space-x-4 lg:space-x-6">
-              <img class="w-10 h-10 rounded-full lg:w-20 lg:h-20" src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+              <img class="w-16 h-16 crop-heptagon" src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
               <div class="leading-tight space-y-1">
                 <h3>{{player}}</h3>
                 <span class="text-sm">Short player bio?</span>

@@ -15,7 +15,7 @@
         </div>
         <hr class="hr-text text-xl" data-content="The Story">
         <article class="frame-gold camp-story">
-          <div class="bg-light p-5">
+          <div class="bg-white text-black p-5">
             <p>{{ campaign.description }}</p>
             <!-- P tags to be removed, when we create the input field for the description. This
               should be a WYSIWYG editor, allowing the users to create their own paragraphs --->
@@ -75,6 +75,7 @@
         <a href="#players" class="p-5">Players</a>
       </li>
     </ul>
+    {{view.part_of_game}}
     {% if view.part_of_game %}
       {% if not request.user.is_gm %}
         <a href="{{ url('campaign-leave', pk=campaign.id) }}"
