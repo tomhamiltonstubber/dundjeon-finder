@@ -33,9 +33,9 @@ def generate_random_key(length=50):
 def index(request):
     meta_data = {
         'meta_title': 'Find Dungeons & Dragons Games',
-        'meta_description': 'The online dungeons and dragons search engine'
+        'meta_description': 'The online dungeons and dragons search engine',
     }
-    
+
     if request.user.is_authenticated:
         return render(request, 'users/dashboard.jinja', meta_data)
     return render(request, 'index.jinja', meta_data)

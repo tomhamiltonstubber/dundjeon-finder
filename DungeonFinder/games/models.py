@@ -16,7 +16,7 @@ class CampaignQueryset(QuerySet):
             query = Q(players=request.user)
             if not as_player and request.user.is_gm:
                 query |= Q(creator=request.user.is_gm)
-            return self.filter(query)
+            return self.filter(query).distinct()
 
 
 class Campaign(models.Model):
