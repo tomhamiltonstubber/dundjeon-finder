@@ -9,12 +9,13 @@
 @import "helper";
 
 @import "alerts";
-@import "frames";
-@import "forms";
 @import "campaign";
 @import "filter";
+@import "frames";
+@import "forms";
 @import "footer";
 @import "hr";
+@import "prose";
 @import "theme";
 @import "typography";
 
@@ -114,10 +115,6 @@ figure{
     background: #e7d4a9;
 }
 
-p{
-    margin: 1em 0!important;
-}
-
 button{
     outline: none!important;
 }
@@ -164,7 +161,7 @@ button{
     right: 0;
     height: 100vh;
     width: 200px;
-    z-index: 20;
+    z-index: 10;
     transform: translateX(200px);
     transition: transform .3s ease;
     border-left: 1px solid rgb(142 130 130 / 26%);

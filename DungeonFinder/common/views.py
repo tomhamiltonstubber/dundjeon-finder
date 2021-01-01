@@ -46,3 +46,9 @@ def handle_404(request, exception=None):
 
     title, img = random.choice(options)
     return render(request, '404.jinja', {'title': title, 'image': img}, status=404)
+
+def blog(request):
+    return render(request, 'blog.jinja')
+
+def blog_detail(request):
+    return render(request, 'blog-detail.jinja')
