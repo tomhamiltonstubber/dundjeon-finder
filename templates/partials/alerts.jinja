@@ -1,0 +1,14 @@
+{% for message in messages %}
+  {% if 'error' in message.tags %}
+    {% set alert_class = 'alert-danger' %}
+  {% elif 'warn' in message.tags %}
+    {% set alert_class = 'alert-warning' %}
+  {% elif 'info' in message.tags %}
+    {% set alert_class = 'alert-info' %}
+  {% else %}
+    {% set alert_class = 'alert-success' %}
+  {% endif %}
+  <div class="alert bottom-0 fixed p-10 right-0">
+    <span class="p-2 text-white {{ alert_class }}">{{ message }}</span>
+  </div>
+{% endfor %}

@@ -52,9 +52,17 @@ const config = {
         use: {loader: 'nunjucks-loader'}
       },
       {
-       test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
-        use: { loader: 'url-loader?limit=100000' }
-      }
+        test: /\.(ttf|eot|svg|otf|png|jpeg|jpg|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        exclude: /node_modules|static\/emails\.scss/,
+        use: [{
+            loader: 'url-loader',
+            options: { 
+                limit: 8000, // Convert images < 8kb to base64 strings
+                name: 'images/[hash]-[name].[ext]',
+                publicPath: './'
+            }
+        }]
+    }
     ]
   }
 }

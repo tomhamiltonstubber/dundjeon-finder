@@ -1,12 +1,17 @@
 <html>
   <head>
-    <link rel="stylesheet" href="{{ static('/dist/main.css') }}" crossorigin="anonymous">
+    {% include 'partials/seo.jinja' %}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ static('dist/main.css') }}" crossorigin="anonymous">
   </head>
-  <body>
-    {% include '/partials/header.jinja' %}
+  <body class="{% if user.is_authenticated %}{{user.user_theme}}{% else %} theme-dark-red {% endif %}">
+    {% include 'partials/header.jinja' %}
+    {% include 'partials/alerts.jinja' %}
     {% block content %}{% endblock %}
-    {% include '/partials/footer.jinja' %}
-  
-    <script src="{{ static('/dist/main.js') }}"></script>
+    {% include 'partials/footer.jinja' %}
+    <script src="{{ js_path('main') }}"></script>
+    <form id="post-form" method="POST" class="hidden">
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    </form>
   </body>
 </html>

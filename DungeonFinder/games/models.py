@@ -1,6 +1,22 @@
+from html import escape
+
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Q, QuerySet
 from django.urls import reverse
+
+
+class CampaignQueryset(QuerySet):
+    def request_joined_qs(self, request, as_player=False):
+        if not request.user.is_authenticated:
+            return self.none()
+        elif request.user.is_admin:
+            return self.all()
+        else:
+            query = Q(players=request.user)
+            if not as_player and request.user.is_gm:
+                query |= Q(creator=request.user.gamemaster)
+            return self.filter(query).distinct()
 
 
 class Campaign(models.Model):
@@ -29,6 +45,8 @@ class Campaign(models.Model):
     RP_LIGHT = 'light'
     RP_CHOICES = ((RP_ANY, 'Any'), (RP_LIGHT, 'light'), (RP_HEAVY, 'heavy'))
 
+    objects = CampaignQueryset.as_manager()
+
     name = models.CharField(max_length=255)
 
     accepting_players = models.BooleanField(default=True)
@@ -50,14 +68,17 @@ class Campaign(models.Model):
     def __str__(self):
         return self.name
 
+    def game_full(self):
+        return self.players.count() >= self.max_players
+
     def get_absolute_url(self):
         return reverse('campaign-details', kwargs={'pk': self.pk})
 
     def get_list_data(self):
         return {
-            'name': self.name,
+            'name': escape(self.name),
             'link': self.get_absolute_url(),
             'free_spaces': self.free_spaces,  # This has been annotated onto the queryset
-            'description': self.description,
+            'description': escape(self.description),
             'price_per_session': self.price_per_session,
         }

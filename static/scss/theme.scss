@@ -1,9 +1,101 @@
-.theme-green{
-    .btn{
-        background-image: -webkit-linear-gradient(top, #3df66d, #0b942f);
-    }
-    h1,h2,h3,h4,
-    .text-red-600{
-        color: #0b942f;
+$dark_themes: (
+    "dark-red": #b91c1b, 
+    "dark-green": green, 
+    "dark-blue": blue, 
+    "dark-gold": gold
+    );
+
+$light_themes: (
+    "light-red": #b91c1b,
+    "light-green": green, 
+    "light-blue": blue, 
+    "light-gold": gold
+);
+
+
+@each $theme, $colour in $dark_themes {
+    .theme-#{$theme}{
+        .text-red-600{
+            color: $colour;
+        }
+
+        .bg-light{
+            background: #1a202e;
+        }
+
+        .bg-dark{
+            background-color: #1a202e;
+        }
+
+        .bg-theme{
+            background-color: $colour;
+        }
+    
+        .theme-option.selected{
+            border-color: $colour;
+        }
+
+        .btn{
+            background-image: -webkit-linear-gradient(top, $colour, darken($colour, 6%));
+        }
     }
 }
+
+@each $theme, $colour in $light_themes {
+    .theme-#{$theme}{
+        background: #fdecc7;
+        color: #333;
+
+        .bg-light{
+            background: #fdecc7;
+        }
+
+        .bg-dark{
+            background-color: #e7d4a9;
+        }
+
+        .bg-theme{
+            background-color: $colour;
+        }
+
+        nav{        
+            .logo{
+                background-image: url(../img/nav-shield-invert.png);
+            }
+            
+            svg{
+                fill: #000;
+             }
+        }
+
+        .hr-icon{
+            filter: invert(1);
+        }
+
+        .hr-text:after{
+            background: #fdecc7;
+        }
+    
+        .theme-option.selected{
+            border-color: $colour;
+        }
+
+        .btn{
+            background-image: -webkit-linear-gradient(top, $colour, darken($colour, 6%));
+        }
+    }
+}
+
+
+// Theme Selection //
+
+.theme-option {
+    border: 5px solid #444;
+    padding: 5px;
+    cursor: pointer;
+
+    &:hover{
+        border-color: #fff;
+    }
+}
+

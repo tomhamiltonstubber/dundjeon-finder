@@ -9,8 +9,8 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    background: #000;
-    border: 2px solid #424b61;
+    background: transparent;
+    border: 2px solid rgb(0 0 0 / 21%);
     margin-bottom: 2em;
     border-radius: 40px;
     overflow: hidden;
@@ -37,7 +37,6 @@ label{
 .filter-select select,
 .filter-select input[type="date"] {
     background: transparent;
-    color: #fff;
     appearance: none;
     padding: 1em;
     background-image: url(/static/img/dropdown.png);
@@ -47,7 +46,6 @@ label{
     padding-left: 4em;
     cursor: pointer;
     width: 260px;
-    filter: grayscale(.6);
 }
 
 .filter-select select:hover{

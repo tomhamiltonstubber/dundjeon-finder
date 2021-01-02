@@ -12,3 +12,4 @@ localsettings.py
 static/dist/
 node_modules
 media/
+package-lock.json

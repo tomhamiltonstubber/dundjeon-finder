@@ -4,7 +4,7 @@ from django.core.exceptions import PermissionDenied, SuspiciousOperation
 from django.db.models import Count, F
 from django.forms import modelform_factory
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 
@@ -13,10 +13,6 @@ from DungeonFinder.common.views import DFCreateView, DFEditView
 from DungeonFinder.games.forms import CampaignsFilterForm
 from DungeonFinder.games.models import Campaign
 from DungeonFinder.users.views import GMRequestMixin
-
-
-def index(request):
-    return render(request, 'index.jinja')
 
 
 def campaign_available_list_data(request):
@@ -69,20 +65,33 @@ class AvailCampaignsListView(ListView):
 available_campaigns_list = AvailCampaignsListView.as_view()
 
 
-class CampaignDetails(DetailView):
+class CampaignDetailsForGM(DetailView):
+    model = Campaign
+    template_name = 'games/gm-camp-details.jinja'
+    part_of_game = True
+
+
+class CampaignDetailsForPlayer(DetailView):
     model = Campaign
     template_name = 'games/camp-details.jinja'
-
-    def get_context_data(self, **kwargs):
-        camp = self.get_object()
-        game_details_visible = self.request.user.is_authenticated and (
-            self.request.user.id in self.get_object().players.values_list('id', flat=True)
-            or (self.request.user.is_gm and camp.creator_id == self.request.user.gamemaster.id)
-        )
-        return super().get_context_data(game_details_visible=game_details_visible, **kwargs)
+    part_of_game = True
 
 
-campaign_details = CampaignDetails.as_view()
+class CampaignDetailsNotJoined(DetailView):
+    model = Campaign
+    template_name = 'games/camp-details.jinja'
+    part_of_game = False
+
+
+def campaign_details(request, pk):
+    campaigns = Campaign.objects.request_joined_qs(request).values_list('pk', flat=True)
+    if pk in campaigns:
+        if request.user.is_gm:
+            return CampaignDetailsForGM.as_view()(request, pk=pk)
+        else:
+            return CampaignDetailsForPlayer.as_view()(request, pk=pk)
+    else:
+        return CampaignDetailsNotJoined.as_view()(request, pk=pk)
 
 
 class CampaignUpdateMixin(GMRequestMixin):
@@ -91,6 +100,7 @@ class CampaignUpdateMixin(GMRequestMixin):
 
 
 class CampaignCreate(CampaignUpdateMixin, DFCreateView):
+    template_name = 'games/camp-create.jinja'
     form_class = modelform_factory(model=Campaign, form=DFModelForm, fields='__all__')
 
     def form_valid(self, form):
@@ -114,7 +124,7 @@ campaign_edit = CampaignEdit.as_view()
 
 
 @require_POST
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/signup/')
 def campaign_delete(request, pk):
     obj = get_object_or_404(Campaign.objects.filter(creator=getattr(request.user, 'gamemaster', None)), pk=pk)
     obj.delete()
@@ -122,7 +132,7 @@ def campaign_delete(request, pk):
 
 
 @require_POST
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/signup/')
 def campaign_change_status(request, pk):
     obj = get_object_or_404(Campaign.objects.filter(creator=getattr(request.user, 'gamemaster', None)), pk=pk)
     status = request.POST['status']
@@ -136,7 +146,7 @@ def campaign_change_status(request, pk):
 
 
 @require_POST
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/signup/')
 def campaign_join(request, pk):
     camp_qs = Campaign.objects.annotate(free_spaces=F('max_players') - Count('players')).filter(
         status__in=Campaign.STATUS_JOINABLE, free_spaces__gt=0, accepting_players=True
@@ -147,3 +157,12 @@ def campaign_join(request, pk):
     camp.players.add(request.user)
     messages.success(request, "You've joined this game. Have fun!")
     return redirect(camp.get_absolute_url())
+
+
+@require_POST
+@login_required(login_url='/signup/')
+def campaign_leave(request, pk):
+    camp = get_object_or_404(Campaign.objects.request_joined_qs(request, as_player=True), pk=pk)
+    camp.players.remove(request.user)
+    messages.success(request, "You've left this game. Hope you get a new one!")
+    return redirect('avail-campaign-list')

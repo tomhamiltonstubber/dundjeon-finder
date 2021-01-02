@@ -1,17 +1,16 @@
-{% macro game_renderer(game_data) %}
-  <article class="shadow-lg bg-white text-black">
-    <a href="{{ game_data.link }}" class="block">
+<article class="shadow-lg bg-white text-black frame-gold">
+    <a href="{{ camp.get_absolute_url() }}" class="block">
         <div class="overflow-hidden h-48 relative">
             <img alt="Placeholder" class="absolute block h-auto h-full object-cover top-0 w-f w-full" src="/static/img/bg-1.jpg">
         </div>
         <header class="p-2 px-5 bg-white relative">
-            <h2 class="text-2xl font-heading mt-2">{{ game_data.name }}</h2>
-            <p><?php echo $randomDate = date("d M Y", $timestamp); ?> at 7:30pm <span class="text-xs">(GMT)</span></p>
-     </header>
-     <div class="bg-dark-blue grid grid-cols-4 text-xs text-white px-5 py-3">
+            <h2 class="text-2xl font-heading mt-2">{{ camp.name }}</h2>
+            {# <p>{{camp.next_game_dt}}</p> #}
+        </header>
+        <div class="bg-dark-blue text-white grid grid-cols-4 text-xs px-5 py-3">
         <div class="flex items-center">
             <img src="/static/img/user.svg" class="w-5 mr-2">
-            <span class="pt-1">{{ game_data.free_spaces }}</span>
+            <span class="pt-1">{{ camp.players.count() }} / {{camp.max_players}}</span>
         </div>
         <div class="flex items-center">
             <img src="/static/img/dice.svg" class="w-5 mr-2">
@@ -26,10 +25,12 @@
             <span class="pt-1">20/12/06</span>
         </div>
     </div>
-</a>
+        <div class="bg-white text-xs px-3 py-1">
+            <div class="flex items-center">
+                <img src="/static/img/bg-1.jpg" class="mr-2 w-8 h-8"> 
+                <span>Hosted by {{camp.creator}}</span>
+            </div>
+        </div>
+    </a>
 </article>
-{% endmacro %}
 
-{% for game_data in games_data %}
-  {{ game_renderer(game_data) }}
-{% endfor %}

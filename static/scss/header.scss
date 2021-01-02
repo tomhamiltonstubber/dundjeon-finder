@@ -1,48 +1,58 @@
-nav{
-    background: #1a202e;
-    border-bottom: 1px solid rgb(142 130 130 / 26%);
-    height: 50px;
-    overflow: visible;
-}
-
-.invert nav .logo{
-    background-image: url(../img/nav-shield-invert.png);
-}
-
-nav .logo{
-	background-image: url(../img/nav-shield.png);
-    height: 100px;
-    width: 100px;
-    background-size: cover;
-    background-position: bottom;
-}
-
-nav .logo:hover{
-    opacity: 1;
-}
-
-.invert nav{
-    background-color: #fdecc7;
-}
-
-
-nav{
-    #user-menu{
-        position: absolute;
-        right: 0;
-        transform: translateY(20px);
-        transition: all .2s linear;
-        visibility: hidden;
-        pointer-events: none;
-        opacity: 0;
+header{
+    nav{
+        border-bottom: 1px solid rgb(142 130 130 / 26%);
+        height: 50px;
+        overflow: visible;
     }
-    #user-menu-toggle{
-        background: red;
+
+    nav .logo{
+        background-image: url(../img/nav-shield.png);
+        height: 101px;
+        width: 100px;
+        background-size: cover;
+        background-position: bottom;
+        font-weight: 600;
+
+        svg{
+            transform: rotate(45deg);
+        }
+
+        svg:last-of-type{
+            display: none;
+        }
+
+        &:hover{
+            svg{
+                transform: rotate(0);
+                
+                &:first-of-type{
+                    display: none;
+                }
+                &:last-of-type{
+                    display: block;
+                }
+            }
+        }
     }
-    #user-menu-toggle:checked ~ #user-menu {
-        visibility: visible;
-        pointer-events: auto;
-        opacity: 1;
-        transform: translateY(5px);
+
+    nav{
+        #user-menu{
+            position: absolute;
+            right: 0;
+            transform: translateY(20px);
+            transition: all .2s linear;
+            visibility: hidden;
+            pointer-events: none;
+            opacity: 0;
+        }
+        #user-menu-toggle{
+            background: red;
+        }
+        #user-menu-toggle:checked ~ #user-menu {
+            visibility: visible;
+            pointer-events: auto;
+            opacity: 1;
+            transform: translateY(5px);
+        }
     }
 }

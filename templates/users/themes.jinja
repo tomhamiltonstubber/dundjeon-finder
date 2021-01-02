@@ -1,0 +1,29 @@
+{% extends 'base.jinja' %}
+
+{% block content %}
+<section class="pb-20 pt-20 px-4 text-center flex items-center">
+	<div class="w-full max-w-5xl mx-auto">
+		<h2 class="text-4xl leading-tight font-heading">Choose your style</h2>
+		<p class="text-xl mt-2">
+			Change your theme and colours below. <br/>Don't worry, you can change these at any time.
+		</p>
+		<form method="post" style="background: transparent;">
+			<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+			<div class="py-10 grid grid-cols-3 grid-s gap-3">
+				{% for radio in form.theme %}
+				<label class="theme-option" data-theme="{{radio.data.value}}">
+        	<span class="hidden">{{ radio }}</span>
+					<img src="/static/img/theme-red.png">
+					<div class="mt-1">
+						{{ radio.data.label }}
+					</div>
+				</label>
+				{% endfor %}
+			</div>
+			<button class="btn btn-primary" type="submit">Save</button>
+		</div>
+	</form>
+</div>
+</div>
+</section>
+{% endblock %}

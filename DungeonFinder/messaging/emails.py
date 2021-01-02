@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass
+from typing import Optional
 
 import boto3
 import sass
@@ -90,7 +91,7 @@ class UserEmail:
     context: dict
     template_type: str
     recipient: EmailRecipient
-    _template: EmailTemplate = None
+    _template: Optional[EmailTemplate] = None
 
     @property
     def template(self):

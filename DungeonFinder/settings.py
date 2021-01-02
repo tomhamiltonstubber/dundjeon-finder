@@ -13,7 +13,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'TEST_SECRET')
 DEBUG = os.getenv('DEBUG', True)
 LIVE = os.getenv('LIVE')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+INTERNAL_IPS = ['127.0.0.1', 'localhost']
 ON_HEROKU = 'DYNO' in os.environ
 
 
@@ -21,9 +22,11 @@ def env_true(var_name, alt='FALSE'):
     return os.getenv(var_name, alt).upper() in {'1', 'TRUE'}
 
 
+TESTING = os.getenv('TESTING')
 BASE_URL = os.getenv('BASE_URL', 'http://localhost:8000')
 
 # Application definition
+LOGIN_REDIRECT_URL = '/login/'
 
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'captcha',
     'django_rq',
+    'django_extensions',
     'DungeonFinder.games',
     'DungeonFinder.users',
     'DungeonFinder.common',
@@ -46,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    None if TESTING else 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,7 +92,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'DungeonFinder.wsgi.application'
-
 
 # =======================
 #  Database
@@ -171,6 +175,7 @@ AWS_STATIC_LOCATION = 'static'
 PUBLIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_PUBLIC_BUCKET_NAME
 PUBLIC_URL = os.getenv('PUBLIC_URL', PUBLIC_URL)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+USE_BUNDLED_STATICS = ON_HEROKU
 
 if not LIVE:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -189,6 +194,17 @@ if sentry_dsn := os.getenv('SENTRY_DSN'):
 # =======================
 #   Logging
 # =======================
+
+ADMINS = (('Tom Hamilton Stubber', 'tomhamiltonstubber@gmail.com'),)
+if ON_HEROKU:  # pragma: no cover
+    # Use SMTP gmail backend for admins emails so it doesn't suffer
+    # from any problems with Mandrill, eg. testing mode or exceeding quota.
+    EMAIL_USE_TLS = True
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = 'dungeonfinder.errors@gmail.com'
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 LOGGING = {
     'version': 1,
@@ -214,8 +230,8 @@ LOGGING = {
         'null': {'class': 'logging.NullHandler'},
         'sentry': {'level': 'WARNING', 'class': 'sentry_sdk.integrations.logging.EventHandler'},
         'django.server': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'django.server'},
-        'df': {
-            'level': 'DEBUG' if DEBUG else 'INFO',
+        'df_console': {
+            'level': 'INFO',
             'class': 'DungeonFinder.streamhandler.StreamHandler',
             'formatter': 'df',
         },
@@ -223,7 +239,7 @@ LOGGING = {
     'loggers': {
         'django.server': {'handlers': ['django.server'], 'level': 'INFO', 'propagate': False},
         'django': {'handlers': ['debug_console'], 'level': 'INFO'},
-        'df': {'handlers': ['df', 'sentry'], 'level': 'DEBUG', 'propagate': False},
+        'df': {'handlers': ['df_console', 'sentry'], 'level': 'DEBUG', 'propagate': False},
         'django.security': {'handlers': ['sentry', 'debug_console'], 'level': 'ERROR', 'propagate': False},
         'django.security.DisallowedHost': {'handlers': ['null'], 'propagate': False},
         'sentry.errors': {'level': 'WARNING', 'handlers': ['debug_console'], 'propagate': False},
@@ -243,7 +259,7 @@ RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', '6LeIxAcTAAAAAGG-vFI1
 #   Redis and RQ
 # =======================
 
-redis_url = urlparse(os.getenv('REDISCLOUD_URL', 'redis://localhost:6379'))
+redis_url = urlparse(os.getenv('REDIS_URL', 'redis://localhost:6379'))
 redis_db = os.getenv('REDIS_DB', '0')
 redis_connections = int(os.getenv('REDIS_CONNECTIONS', '50'))
 CACHES = {
