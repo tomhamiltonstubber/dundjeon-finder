@@ -27,7 +27,7 @@
   },
   "scripts": {
     "main": "webpack --config webpack.config.js",
-    "main-watch": "yarn run main --watch --output-filename [name].js"
+    "main-watch": "yarn run main --watch --output-filename [name].js --mode development"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

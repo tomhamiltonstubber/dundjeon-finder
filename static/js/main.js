@@ -46,7 +46,7 @@ const init_campaigns_list = () => {
         })
     }
     update_games_list()
-    $('#games-filter-form input, #games-filter-form select').on('change', function(event) {
+    $('#games-filter-form input, #games-filter-form select').change(() => {
       $loading_screen.addClass('active')
       update_games_list()
     })
@@ -64,7 +64,7 @@ const init_campaign_messages = () => {
       $('#id_text').val('')
       $('#message-submit').attr('disabled', true).addClass('disabled')
       $.post($form.attr('action'), form_data).done(data => {
-        render_messages(data['last_id'])
+        render_messages(data['count'])
         $('#message-submit').removeAttr('disabled', true).removeClass('disabled')
       })
     })

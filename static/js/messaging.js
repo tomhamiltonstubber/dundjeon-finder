@@ -1,21 +1,21 @@
 import $ from 'jquery'
 import messages from './templates/messages.njk'
 
-export function render_messages (last_id) {
-  $.get(window.msg_feed_url + '?last_id=' + (last_id || 0)).done(data => {
-    if (data.length) {
-      last_id = data[0]['id']
-      const html = messages.render({'messages': data})
-      $('#messages').html(html)
-    }
-  })
-  return last_id
+export function render_messages () {
+  $.get(window.msg_feed_url + '?c=' + (window.msg_count || 0))
+    .done(data => {
+      window.msg_count = data.length
+      if (data.length) {
+        const html = messages.render({'messages': data})
+        $('#messages').html(html)
+      }
+    })
 }
 
 export function init_messages () {
-  let last_id = null
-  render_messages(last_id)
+  window.msg_count = null
+  render_messages()
   setInterval(function () {
-    last_id = render_messages(last_id)
+    render_messages()
   }, 10000)
 }

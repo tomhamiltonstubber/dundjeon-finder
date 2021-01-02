@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404
+from django.core.exceptions import SuspiciousOperation
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
 from DungeonFinder.games.models import Campaign
@@ -19,7 +20,7 @@ def create_message(request, pk):
         message.campaign = campaign
         message.author = request.user
         message.save()
-        return JsonResponse({'last_id': message.id})
+        return JsonResponse({'count': campaign.message_set.count()})
     else:
         return JsonResponse(form.errors, status=400)
 
@@ -32,9 +33,9 @@ def edit_message(request, pk):
     form.full_clean()
     if form.is_valid():
         form.save()
-        return HttpResponse('OK')
+        return redirect(message.campaign.get_absolute_url())
     else:
-        return HttpResponse(form.errors, status=400)
+        raise SuspiciousOperation(form.errors)
 
 
 @require_POST
@@ -42,15 +43,21 @@ def edit_message(request, pk):
 def delete_message(request, pk):
     message = get_object_or_404(Message.objects.request_editable_qs(request), pk=pk)
     message.delete()
-    return HttpResponse('OK')
+    return redirect(message.campaign.get_absolute_url())
 
 
 @login_required
 def message_feed(request, pk):
     messages = Message.objects.request_qs(request).filter(campaign=pk)
-    if last_id := request.GET.get('last_id', 0):
-        messages = messages.filter(id__gt=last_id)
+    new_messages = False
+    if msg_count := request.GET.get('c', 0):
+        try:
+            msg_count = int(msg_count)
+        except TypeError:
+            new_messages = False
+        else:
+            new_messages = messages.count() > msg_count
     data = []
-    if messages.exists():
+    if new_messages:
         data = [message.get_list_data() for message in messages.select_related('author')]
     return JsonResponse(data, safe=False)
