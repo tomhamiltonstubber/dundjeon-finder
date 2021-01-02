@@ -1,8 +1,12 @@
+import os
 from datetime import datetime as dt
 from unittest.mock import patch
 
 from captcha.client import RecaptchaResponse
+from django.conf import settings
 from django.core.cache import cache
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
 from django.test import Client, TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 from pytz import utc
@@ -242,3 +246,41 @@ class UserSignupTestCase(TransactionTestCase):
         r = self.client.get(reverse('signup-confirm', args=[key]))
         self.assertRedirects(r, reverse('dashboard'))
         assert User.objects.count() == 1
+
+
+class UserFormTest(TestCase):
+    def setUp(self):
+        self.user = UserFactory(last_name='Bar')
+        self.client = AuthenticatedClient(user=self.user)
+        self.rurl = reverse('profile-edit')
+
+    def _get_temp_image(self, size_str, file_type):
+        temp_image = NamedTemporaryFile(delete=True)
+        img_path = os.path.join(settings.BASE_DIR, f'static/tests/{size_str}.{file_type}')
+        temp_image.write(open(img_path, 'rb').read())
+        temp_image.flush()
+        return temp_image
+
+    def test_edit_profile(self):
+        r = self.client.get(reverse('profile'))
+        self.assertContains(r, 'Bar')
+        self.assertNotContains(r, 'Foo')
+        r = self.client.get(self.rurl)
+        self.assertContains(r, 'Bar')
+        r = self.client.post(self.rurl, {'screen_name': 'Banjo', 'last_name': 'Foo', 'first_name': 'test'}, follow=True)
+        self.assertRedirects(r, reverse('profile'))
+        self.assertContains(r, 'Foo')
+        self.assertNotContains(r, 'Bar')
+        r = self.client.get(reverse('profile'))
+        self.assertContains(r, 'Foo')
+        self.assertNotContains(r, 'Bar')
+        assert User.objects.get(pk=self.user.pk).last_name == 'Foo'
+
+    def test_add_avatar(self):
+        img = File(self._get_temp_image('300x300', file_type='png'), name='test.png')
+        self.user.avatar = img
+        self.user.save()
+        user = User.objects.get()
+        assert user.avatar
+        r = self.client.get(reverse('profile'))
+        self.assertContains(r, f'src="{user.avatar.url}.200x200_q85_crop.jpg"')

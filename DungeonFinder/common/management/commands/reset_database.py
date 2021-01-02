@@ -45,7 +45,7 @@ class Command(BaseCommand):
             first_name='Syvas',
             last_name='Lives',
             password='testing1',
-            email='gamemaster@example.com',
+            email='gm@example.com',
             screen_name='SyvasLives',
         )
         gm = GameMaster.objects.create(user=gm_user)

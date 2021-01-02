@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'DungeonFinder.staticfiles',
     'django.contrib.staticfiles',
+    'django_extensions',
     'captcha',
     'django_rq',
-    'django_extensions',
+    'easy_thumbnails',
     'DungeonFinder.games',
     'DungeonFinder.users',
     'DungeonFinder.common',
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'DungeonFinder.urls'
@@ -119,6 +121,7 @@ else:
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
+LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'users.User'
 AUTH_PASSWORD_VALIDATORS = [
@@ -144,12 +147,13 @@ USE_TZ = True
 #  AWS
 # =======================
 
-AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY', '')
-AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY', '')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', '')
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', 'dungeon-finder')
 AWS_PUBLIC_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', 'dungeon-finder-public')
 AWS_REGION = os.getenv('AWS_REGION', 'eu-west-2')
-AWS_STATIC_LOCATION = 'static'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 
 # =======================
@@ -164,18 +168,33 @@ SEND_EMAILS = True
 # =======================
 
 STATIC_ROOT = 'staticfiles'
-STATIC_HOST = os.getenv('STATIC_HOST', BASE_URL)
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-STATIC_URL = STATIC_HOST + '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_URL = '/static/'
+AWS_STATIC_LOCATION = 'static'
+
+PUBLIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_PUBLIC_BUCKET_NAME
+PUBLIC_URL = os.getenv('PUBLIC_URL', PUBLIC_URL)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 USE_BUNDLED_STATICS = ON_HEROKU
+
+if LIVE:
+    MEDIA_URL = os.getenv('MEDIA_URL', f'https://{AWS_PUBLIC_BUCKET_NAME}.s3.amazonaws.com/')
+else:
+    MEDIA_ROOT = 'mediafiles'
+    MEDIA_URL = '/media/'
+    PUBLIC_URL = '/media/public/'
+
+
+# =======================
+#  Sentry
+# =======================
 
 if sentry_dsn := os.getenv('SENTRY_DSN'):
     sentry_sdk.init(dsn=sentry_dsn, integrations=[DjangoIntegration()], send_default_pii=True)
 
 
 # =======================
-#   Logging
+#  Logging
 # =======================
 
 ADMINS = (('Tom Hamilton Stubber', 'tomhamiltonstubber@gmail.com'),)
@@ -239,7 +258,7 @@ RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', '6LeIxAcTAAAAAJcZVRqyHh
 RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe')
 
 # =======================
-#   Redis and RQ
+#  Redis and RQ
 # =======================
 
 redis_url = urlparse(os.getenv('REDIS_URL', 'redis://localhost:6379'))
@@ -259,6 +278,17 @@ CACHES = {
 ASYNC_RQ = env_true('ASYNC_RQ', 'TRUE')
 
 RQ_QUEUES = {'default': {'USE_REDIS_CACHE': 'default', 'ASYNC': ASYNC_RQ}}
+
+# =======================
+#  Thumbnails
+# =======================
+
+THUMBNAIL_ALIASES = {
+    'users.User.avatar': {
+        'lg': {'size': (800, 800), 'crop': True},
+        'sm': {'size': (200, 200), 'crop': True},
+    },
+}
 
 try:
     from localsettings import *  # noqa

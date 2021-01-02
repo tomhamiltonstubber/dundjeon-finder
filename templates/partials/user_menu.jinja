@@ -1,35 +1,38 @@
 <ul class="flex items-center text-sm">
-   <li class="block lg:inline-block mr-2">
+  <li class="block lg:inline-block mr-2">
     <a href="{{ url('avail-campaign-list')}}" class="block p-2 px-5 rounded">Search</a>
   </li>
    <li class="block lg:inline-block mr-2">
     <a href="/" class="block p-2 px-5 rounded">Campaigns</a>
   </li>
   <li class="block lg:inline-block mr-">
-    <a href="/login" class="block p-2 px-5 rounded">Profile</a>
+    <a href="{{ url('login') }}" class="block p-2 px-5 rounded">Profile</a>
   </li>
 </ul>
 <div class="flex items-center">
-<div class="relative">
-     <label class="ml-5 flex items-center" for="user-menu-toggle">
-      <span class="h-8 w-8 flex items-center justify-center text-sm mr-2"> 
-        <img class="crop-heptagon bg-white" src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-        {# User profile picture to be added here #}
+  <div class="relative">
+    <label class="ml-5 flex items-center" for="user-menu-toggle">
+      <span class="h-8 w-8 flex items-center justify-center text-sm mr-2">
+        {% if user.avatar %}
+          <img class="crop-heptagon bg-white" src="{{ user.avatar | thumbnail_url('sm') }}" alt="">
+        {% else %}
+          {# TODO: Need to add the letters as a name #}
+        {% endif %}
       </span>
       <span class="text-xs">
-        {{user | lower}}
+        {{ user | lower }}
       </span>
     </label>
     <input type="checkbox" name="user-menu-toggle" id="user-menu-toggle" class="hidden">
     <div id="user-menu" class="origin-top-right absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-    <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-    <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Dashboard</a>
-      <a href="/edit-profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Edit Profile</a>
-      <a href="{{ url('user-themes') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Theme</a>
-       <a href="/logout" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+      <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+        <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Dashboard</a>
+        <a href="{{ url('profile-edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Edit Profile</a>
+        <a href="{{ url('user-themes') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Theme</a>
+        <a href="{{ url('logout') }}" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
           Sign out
         </a>
-      </form>
+      </div>
     </div>
-  </div>  </div>
+  </div>
 </div>

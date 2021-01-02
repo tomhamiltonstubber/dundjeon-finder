@@ -1,0 +1,14 @@
+{% extends 'base.jinja' %}
+
+{% block content %}
+<section class="pt-32 pb-10 text-white" id="overview">
+  <div class="container mx-auto text-center">
+    <p>{{ user.first_name }}</p>
+    <p>{{ user.last_name }}</p>
+    <p>{{ user.screen_name }}</p>
+    {% if user.avatar %}
+      <p><img src="{{ user.avatar | thumbnail_url('lg') }}"></p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

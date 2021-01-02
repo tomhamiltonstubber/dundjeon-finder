@@ -5,6 +5,13 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
 from django.db.models import QuerySet
+from django.urls import reverse
+from django_rq import job
+from easy_thumbnails.exceptions import InvalidImageFormatError
+from easy_thumbnails.fields import ThumbnailerImageField
+from easy_thumbnails.files import generate_all_aliases
+
+from DungeonFinder.storage import PublicStorage
 
 
 class UserManager(BaseUserManager):
@@ -33,6 +40,9 @@ class User(AbstractUser):
     last_logged_in = models.DateTimeField(
         'Last Logged in', default=datetime(2020, 1, 1, tzinfo=timezone.utc), editable=False
     )
+    avatar = ThumbnailerImageField(
+        'Avatar', upload_to='avatars', blank=True, null=True, storage=PublicStorage(), thumbnail_storage=PublicStorage()
+    )
     screen_name = models.CharField(
         max_length=150,
         unique=True,
@@ -53,6 +63,9 @@ class User(AbstractUser):
     def __str__(self):
         return f'{self.screen_name}'
 
+    def get_absolute_url(self):
+        return reverse('profile')
+
     def initials(self):
         return f'{self.first_name[0]}{self.last_name[0]}'
 
@@ -60,9 +73,33 @@ class User(AbstractUser):
     def is_gm(self):
         return hasattr(self, 'gamemaster')
 
+    def save(self, *args, update_fields=None, **kwargs):
+        new_avatar = False
+        if self.avatar and (not update_fields or 'avatar' in update_fields):
+            if self.pk:
+                new_avatar = User.objects.only('avatar').get(pk=self.pk).avatar != self.avatar
+            else:
+                new_avatar = True
+        super().save(*args, update_fields=update_fields, **kwargs)
+        if new_avatar:
+            process_avatar_thumbnails.delay(self.pk)
+
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+
+
+@job
+def process_avatar_thumbnails(user_pk):
+    user = User.objects.only('avatar').get(id=user_pk)
+    if not user.avatar:
+        return
+    try:
+        generate_all_aliases(user.avatar, include_global=False)
+    except InvalidImageFormatError:
+        # The file has been deleted while generate_all_aliases is being called
+        return False
+    return True
 
 
 class GameMaster(models.Model):

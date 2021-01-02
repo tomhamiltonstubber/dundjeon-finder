@@ -12,12 +12,12 @@ from django.db import IntegrityError
 from django.dispatch import receiver
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.generic import TemplateView
+from django.views.generic import DetailView, TemplateView
 from pytz import utc
 
-from DungeonFinder.common.views import DFFormView, generate_random_key
+from DungeonFinder.common.views import DFEditView, DFFormView, generate_random_key
 from DungeonFinder.messaging.emails import EmailRecipient, EmailTemplate, UserEmail, send_email
-from DungeonFinder.users.forms import UserSignupForm, UserUpdateThemeForm
+from DungeonFinder.users.forms import UserProfileForm, UserSignupForm, UserUpdateThemeForm
 from DungeonFinder.users.models import User
 
 
@@ -120,8 +120,27 @@ def signup_confirm(request, key):
         return redirect(data.get('next') or '/')
 
 
-class UserProfileUpdate:
-    pass
+class UserUpdateProfile(LoginRequiredMixin, DFEditView):
+    model = User
+    form_class = UserProfileForm
+    template_name = 'users/profile-update.jinja'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+edit_profile = UserUpdateProfile.as_view()
+
+
+class UserProfile(DetailView):
+    model = User
+    template_name = 'users/profile.jinja'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+user_profile = UserProfile.as_view()
 
 
 class GMSignUp:
