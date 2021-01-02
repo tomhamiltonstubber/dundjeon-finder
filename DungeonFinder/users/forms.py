@@ -64,3 +64,9 @@ class UserUpdateThemeForm(DFForm):
         ('theme-light-blue', 'Light Blue'),
     ]
     theme = forms.ChoiceField(widget=forms.RadioSelect, choices=themes)
+
+
+class UserProfileForm(DFModelForm):
+    class Meta:
+        model = User
+        fields = 'first_name', 'last_name', 'screen_name', 'avatar'

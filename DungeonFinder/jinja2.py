@@ -5,6 +5,7 @@ import re
 from django.conf import settings
 from django.templatetags.static import static
 from django.urls import reverse
+from easy_thumbnails.templatetags.thumbnail import thumbnail_url
 from jinja2 import Environment
 
 
@@ -35,4 +36,5 @@ def _reverse(rurl, **kwargs):
 def environment(**options):
     env = Environment(**options)
     env.globals.update({'static': static, 'url': _reverse, 'js_path': js_path})
+    env.filters.update({'thumbnail_url': thumbnail_url})
     return env

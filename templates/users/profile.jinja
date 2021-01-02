@@ -6,7 +6,9 @@
     <p>{{ user.first_name }}</p>
     <p>{{ user.last_name }}</p>
     <p>{{ user.screen_name }}</p>
-    <p><img src="{{ user.avatar.url }}"></p>
+    {% if user.avatar %}
+      <p><img src="{{ user.avatar.url }}"></p>
+    {% endif %}
   </div>
 </section>
 {% endblock %}

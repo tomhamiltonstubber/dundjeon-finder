@@ -1,5 +1,5 @@
 <header>
-<nav class="px-3 relative w-full z-20 font-heading bg-dark">
+  <nav class="px-3 relative w-full z-20 font-heading bg-dark">
     <div class="container mx-auto">
       <div class="flex justify-between" style="height: 50px; overflow: visible;">
         <a class="flex flex-col items-center justify-center logo color-red-600 text-xs" href="/">
@@ -10,24 +10,23 @@
           <span class="mb-2">Finder</span>
         </a>
         {% if request.user.is_authenticated %}
-          {% include "/partials/user_menu.jinja" %}
+          {% include 'partials/user_menu.jinja' %}
         {% else %}
-          {% include "/partials/standard_menu.jinja" %}
+          {% include 'partials/standard_menu.jinja' %}
         {% endif %}
       </div>
     </div>
+  </nav>
+  <div id="side-menu" class="font-cursive bg-dark-blue flex flex-col pt-50">
+    <ul class="p-10">
+      <li class="p-5"><a href="/about" class="hover:text-red-600">About</a></li>
+      <li class="p-5"><a href="/about" class="hover:text-red-600">About</a></li>
+      <li class="p-5"><a href="/about" class="hover:text-red-600">About</a></li>
+      <li class="p-5"><a href="/about" class="hover:text-red-600">Blog</a></li>
+      <li class="p-5"><a href="/about" class="hover:text-red-600">Contact</a></li>
+    </ul>
+    <div class="mt-auto p-5">
+      <button class="block mx-auto toggle" id="toggle" onclick="toggleTheme(this)"></button>
+    </div>
   </div>
-</nav>
-<div id="side-menu" class="font-cursive bg-dark-blue flex flex-col pt-50">
-  <ul class="p-10">
-    <li class="p-5"><a href="/about" class="hover:text-red-600">About</a></li>
-    <li class="p-5"><a href="/about" class="hover:text-red-600">About</a></li>
-    <li class="p-5"><a href="/about" class="hover:text-red-600">About</a></li>
-    <li class="p-5"><a href="/about" class="hover:text-red-600">Blog</a></li>
-    <li class="p-5"><a href="/about" class="hover:text-red-600">Contact</a></li>
-  </ul>
-  <div class="mt-auto p-5">
-    <button class="block mx-auto toggle" id="toggle" onclick="toggleTheme(this)"></button>
-  </div>
-</div>
 </header>

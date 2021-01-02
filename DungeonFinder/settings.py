@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'captcha',
     'django_rq',
-    'django_extensions',
+    'easy_thumbnails',
     'DungeonFinder.games',
     'DungeonFinder.users',
     'DungeonFinder.common',
@@ -177,8 +177,10 @@ PUBLIC_URL = os.getenv('PUBLIC_URL', PUBLIC_URL)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 USE_BUNDLED_STATICS = ON_HEROKU
 
-if not LIVE:
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+if LIVE:
+    MEDIA_URL = os.getenv('MEDIA_URL', f'https://{AWS_PUBLIC_BUCKET_NAME}.s3.amazonaws.com/')
+else:
+    MEDIA_ROOT = 'mediafiles'
     MEDIA_URL = '/media/'
     PUBLIC_URL = '/media/public/'
 
@@ -192,7 +194,7 @@ if sentry_dsn := os.getenv('SENTRY_DSN'):
 
 
 # =======================
-#   Logging
+#  Logging
 # =======================
 
 ADMINS = (('Tom Hamilton Stubber', 'tomhamiltonstubber@gmail.com'),)
@@ -256,7 +258,7 @@ RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', '6LeIxAcTAAAAAJcZVRqyHh
 RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe')
 
 # =======================
-#   Redis and RQ
+#  Redis and RQ
 # =======================
 
 redis_url = urlparse(os.getenv('REDIS_URL', 'redis://localhost:6379'))
@@ -276,6 +278,17 @@ CACHES = {
 ASYNC_RQ = env_true('ASYNC_RQ', 'TRUE')
 
 RQ_QUEUES = {'default': {'USE_REDIS_CACHE': 'default', 'ASYNC': ASYNC_RQ}}
+
+# =======================
+#  Thumbnails
+# =======================
+
+THUMBNAIL_ALIASES = {
+    'users.User.avatar': {
+        'lg': {'size': (800, 800), 'crop': True},
+        'sm': {'size': (200, 200), 'crop': True},
+    },
+}
 
 try:
     from localsettings import *  # noqa

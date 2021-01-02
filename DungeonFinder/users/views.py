@@ -4,11 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import login as dj_login, user_logged_in
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import make_password
-<<<<<<< HEAD
-from django.contrib.auth.mixins import LoginRequiredMixin as LoginRequiredMixin
-=======
 from django.contrib.auth.mixins import LoginRequiredMixin
->>>>>>> master
 from django.contrib.auth.views import LoginView
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
@@ -19,10 +15,9 @@ from django.urls import reverse
 from django.views.generic import DetailView, TemplateView
 from pytz import utc
 
-from DungeonFinder.common.forms import DFModelForm
 from DungeonFinder.common.views import DFEditView, DFFormView, generate_random_key
 from DungeonFinder.messaging.emails import EmailRecipient, EmailTemplate, UserEmail, send_email
-from DungeonFinder.users.forms import UserSignupForm, UserUpdateThemeForm
+from DungeonFinder.users.forms import UserProfileForm, UserSignupForm, UserUpdateThemeForm
 from DungeonFinder.users.models import User
 
 
@@ -123,12 +118,6 @@ def signup_confirm(request, key):
         dj_login(request, user)
         messages.success(request, 'Account successfully created.')
         return redirect(data.get('next') or '/')
-
-
-class UserProfileForm(DFModelForm):
-    class Meta:
-        model = User
-        fields = 'first_name', 'last_name', 'screen_name', 'avatar'
 
 
 class UserUpdateProfile(LoginRequiredMixin, DFEditView):
