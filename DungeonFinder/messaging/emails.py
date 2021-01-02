@@ -16,12 +16,13 @@ from DungeonFinder.users.models import User
 
 df_logger = logging.getLogger('df.messaging')
 
-ses_client = boto3.client(
-    'ses',
-    region_name=settings.AWS_REGION,
-    aws_access_key_id=settings.AWS_ACCESS_KEY,
-    aws_secret_access_key=settings.AWS_SECRET_KEY,
-)
+if not settings.TESTING:  # no-cov
+    ses_client = boto3.client(
+        'ses',
+        region_name=settings.AWS_REGION,
+        aws_access_key_id=settings.AWS_ACCESS_KEY,
+        aws_secret_access_key=settings.AWS_SECRET_KEY,
+    )
 
 
 class EmailTemplate:

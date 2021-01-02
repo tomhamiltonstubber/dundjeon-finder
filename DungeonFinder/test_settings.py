@@ -5,7 +5,7 @@ os.environ['ASYNC_RQ'] = 'FALSE'
 
 from DungeonFinder.settings import *
 
-MEDIA_ROOT = '/tmp/tc2/media_main/'
+MEDIA_ROOT = '/tmp/df/media_main/'
 
 try:
     os.makedirs(MEDIA_ROOT)

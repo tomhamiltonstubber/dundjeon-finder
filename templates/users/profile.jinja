@@ -7,7 +7,7 @@
     <p>{{ user.last_name }}</p>
     <p>{{ user.screen_name }}</p>
     {% if user.avatar %}
-      <p><img src="{{ user.avatar.url }}"></p>
+      <p><img src="{{ user.avatar | thumbnail_url('lg') }}"></p>
     {% endif %}
   </div>
 </section>
