@@ -15,7 +15,7 @@ class CampaignQueryset(QuerySet):
         else:
             query = Q(players=request.user)
             if not as_player and request.user.is_gm:
-                query |= Q(creator=request.user.is_gm)
+                query |= Q(creator=request.user.gamemaster)
             return self.filter(query).distinct()
 
 

@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import SuspiciousOperation
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
@@ -35,7 +34,7 @@ def edit_message(request, pk):
         form.save()
         return redirect(message.campaign.get_absolute_url())
     else:
-        raise SuspiciousOperation(form.errors)
+        return JsonResponse(form.errors, status=400)
 
 
 @require_POST
@@ -49,11 +48,11 @@ def delete_message(request, pk):
 @login_required
 def message_feed(request, pk):
     messages = Message.objects.request_qs(request).filter(campaign=pk)
-    new_messages = False
+    new_messages = True
     if msg_count := request.GET.get('c', 0):
         try:
             msg_count = int(msg_count)
-        except TypeError:
+        except ValueError:
             new_messages = False
         else:
             new_messages = messages.count() > msg_count
