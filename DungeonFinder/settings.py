@@ -26,6 +26,7 @@ TESTING = os.getenv('TESTING')
 BASE_URL = os.getenv('BASE_URL', 'http://localhost:8000')
 
 # Application definition
+LOGIN_REDIRECT_URL = '/login/'
 
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 

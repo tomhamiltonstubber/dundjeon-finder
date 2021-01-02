@@ -18,28 +18,29 @@ num_lu = {
 class AuthenticatedClient(Client):
     def __init__(self, is_gm=True, user=None):
         super().__init__()
-        if is_gm:
-            user_cnt = User.objects.filter(gamemaster__isnull=False, is_admin=False).count()
-            num_str = num_lu[user_cnt + 1]
-            kwargs = {
-                'first_name': 'Game',
-                'last_name': f'Master {num_str}',
-                'email': f'game_master_{num_str.lower()}@example.com',
-                'screen_name': f'game_master_{num_str.lower()}',
-            }
-        else:
-            user_cnt = User.objects.filter(gamemaster__isnull=True, is_admin=False).count()
-            num_str = num_lu[user_cnt + 1]
-            kwargs = {
-                'first_name': 'Player',
-                'last_name': num_str,
-                'email': f'player_{num_str.lower()}@example.com',
-                'screen_name': f'player_{num_str.lower()}',
-            }
-        self.user = user or User.objects.create_user(password='testing', **kwargs)
-        logged_in = self.login(username=self.user.email, password='testing')
+        if not user:
+            if is_gm:
+                user_cnt = User.objects.filter(gamemaster__isnull=False, is_admin=False).count()
+                num_str = num_lu[user_cnt + 1]
+                kwargs = {
+                    'first_name': 'Game',
+                    'last_name': f'Master {num_str}',
+                    'email': f'game_master_{num_str.lower()}@example.com',
+                    'screen_name': f'game_master_{num_str.lower()}',
+                }
+            else:
+                user_cnt = User.objects.filter(gamemaster__isnull=True, is_admin=False).count()
+                num_str = num_lu[user_cnt + 1]
+                kwargs = {
+                    'first_name': 'Player',
+                    'last_name': num_str,
+                    'email': f'player_{num_str.lower()}@example.com',
+                    'screen_name': f'player_{num_str.lower()}',
+                }
+            user = User.objects.create_user(password='testing', **kwargs)
+            if is_gm:
+                GameMaster.objects.create(user=user)
+        logged_in = self.login(username=user.email, password='testing')
         if not logged_in:  # pragma: no cover
             raise RuntimeError('Not logged in')
         self.user = User.objects.get(pk=self.session['_auth_user_id'])
-        if is_gm:
-            GameMaster.objects.create(user=self.user)
