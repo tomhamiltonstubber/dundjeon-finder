@@ -12,7 +12,7 @@ from django.urls import reverse
 from pytz import utc
 
 from DungeonFinder.common.test_helpers import AuthenticatedClient
-from DungeonFinder.users.factories.users import UserFactory
+from DungeonFinder.users.factories.users import GameMasterFactory, UserFactory
 from DungeonFinder.users.models import User
 
 
@@ -284,3 +284,17 @@ class UserFormTest(TestCase):
         assert user.avatar
         r = self.client.get(reverse('profile'))
         self.assertContains(r, f'src="{user.avatar.url}.200x200_q85_crop.jpg"')
+
+
+class PlayerProfileTestCase(TestCase):
+    def test_user_profile(self):
+        player = UserFactory()
+        r = self.client.get(player.get_profile_url())
+        self.assertContains(r, player.screen_name)
+
+
+class GMProfileTestCase(TestCase):
+    def test_gm_profile(self):
+        gm = GameMasterFactory()
+        r = self.client.get(gm.get_profile_url())
+        self.assertContains(r, gm.user.screen_name)
