@@ -1,7 +1,5 @@
-from datetime import datetime
-
 from django.contrib import messages
-from django.contrib.auth import login as dj_login, user_logged_in
+from django.contrib.auth import login as dj_login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,12 +7,11 @@ from django.contrib.auth.views import LoginView
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
-from django.dispatch import receiver
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, TemplateView
-from pytz import utc
 
+from DungeonFinder.actions.models import Action, record_action
 from DungeonFinder.common.views import DFEditView, DFFormView, DFView, generate_random_key
 from DungeonFinder.messaging.emails import EmailRecipient, EmailTemplate, UserEmail, send_email
 from DungeonFinder.users.forms import UserProfileForm, UserSignupForm, UserUpdateThemeForm
@@ -36,6 +33,11 @@ class Login(LoginView):
     form_class = AuthenticationForm
     redirect_authenticated_user = True
 
+    def form_valid(self, form):
+        r = super().form_valid(form)
+        record_action(self.request.user, Action.ACTION_LOGIN)
+        return r
+
     def get_redirect_url(self):
         return reverse('dashboard')
 
@@ -44,12 +46,6 @@ class Login(LoginView):
 
 
 login = Login.as_view()
-
-
-@receiver(user_logged_in)
-def update_user_history(sender, user, **kwargs):
-    user.last_logged_in = datetime.now().replace(tzinfo=utc)
-    user.save(update_fields=['last_logged_in'])
 
 
 class SignupPending(TemplateView):

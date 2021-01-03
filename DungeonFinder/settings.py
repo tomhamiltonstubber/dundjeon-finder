@@ -16,6 +16,7 @@ LIVE = os.getenv('LIVE')
 ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = ['127.0.0.1', 'localhost']
 ON_HEROKU = 'DYNO' in os.environ
+HEROKU_WEB_DYNO = ON_HEROKU and 'web' in os.environ['DYNO']  # Checking if on worker or not
 
 
 def env_true(var_name, alt='FALSE'):
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'DungeonFinder.users',
     'DungeonFinder.common',
     'DungeonFinder.messaging',
+    'DungeonFinder.actions.apps.AppConfig',
 ]
 
 MIDDLEWARE = [

@@ -11,6 +11,7 @@ from django.test import Client, TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 from pytz import utc
 
+from DungeonFinder.actions.models import Action
 from DungeonFinder.common.test_helpers import AuthenticatedClient
 from DungeonFinder.users.factories.users import GameMasterFactory, UserFactory
 from DungeonFinder.users.models import User
@@ -38,7 +39,11 @@ class UserAuthTestCase(TestCase):
         self.assertRedirects(r, '/')
         self.assertContains(r, 'Sign out')
         self.assertNotContains(r, 'Login')
-        assert User.objects.get(id=user.id).last_logged_in.date() == dt.now().date()
+        user = User.objects.get(id=user.id)
+        assert user.last_logged_in.date() == dt.now().date()
+        action = Action.objects.get()
+        assert action.action_type == Action.ACTION_LOGIN
+        assert action.actor == action.target_user == user
 
     def test_logout(self):
         client = AuthenticatedClient()
@@ -119,7 +124,8 @@ class UserSignupTestCase(TransactionTestCase):
         self.assertContains(r, 'too common')
 
     def test_user_signup_logged_in(self):
-        r = AuthenticatedClient().get(self.signup_url)
+        cli = AuthenticatedClient()
+        r = cli.get(self.signup_url)
         self.assertRedirects(r, reverse('dashboard'))
 
     @patch('captcha.fields.client.submit')
