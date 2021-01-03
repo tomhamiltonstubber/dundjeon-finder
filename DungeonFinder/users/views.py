@@ -11,7 +11,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from django.dispatch import receiver
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, TemplateView
 from pytz import utc
 
@@ -124,6 +124,7 @@ class UserUpdateProfile(LoginRequiredMixin, DFEditView):
     model = User
     form_class = UserProfileForm
     template_name = 'users/profile-update.jinja'
+    success_url = reverse_lazy('dashboard')
 
     def get_object(self, queryset=None):
         return self.request.user
