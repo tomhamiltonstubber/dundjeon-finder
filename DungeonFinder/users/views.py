@@ -67,7 +67,6 @@ class UserSignUp(DFFormView):
     form_title = "Sign Up"
     button_label = "Create Profile"
     template_name = 'def-form.jinja'
-    
 
     form_class = UserSignupForm
 
