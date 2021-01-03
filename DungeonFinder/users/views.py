@@ -11,7 +11,7 @@ from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from django.dispatch import receiver
 from django.shortcuts import redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, TemplateView
 from pytz import utc
 
@@ -29,7 +29,9 @@ class GMRequestMixin:
 
 
 class Login(LoginView):
-    template_name = 'users/login.jinja'
+    form_title = "Welcome Back"
+    button_label = "Login"
+    template_name = 'def-form.jinja'
     title = 'Login'
     form_class = AuthenticationForm
     redirect_authenticated_user = True
@@ -62,7 +64,11 @@ signup_pending = SignupPending.as_view()
 
 
 class UserSignUp(DFFormView):
-    template_name = 'users/signup.jinja'
+    form_title = "Sign Up"
+    button_label = "Create Profile"
+    template_name = 'def-form.jinja'
+    
+
     form_class = UserSignupForm
 
     def dispatch(self, request, *args, **kwargs):
@@ -123,7 +129,10 @@ def signup_confirm(request, key):
 class UserUpdateProfile(LoginRequiredMixin, DFEditView):
     model = User
     form_class = UserProfileForm
-    template_name = 'users/profile-update.jinja'
+    form_title = "Edit Profile"
+    button_label = "Update Profile"
+    template_name = 'def-form.jinja'
+    success_url = reverse_lazy('dashboard')
 
     def get_object(self, queryset=None):
         return self.request.user
