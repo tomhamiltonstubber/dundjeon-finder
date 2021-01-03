@@ -9,11 +9,11 @@
 <div class="flex items-center">
   <div class="relative">
     <label class="ml-5 flex items-center" for="user-menu-toggle">
-      <span class="h-8 w-8 flex items-center justify-center text-sm mr-2">
+      <span class="bg-theme flex h-8 items-center justify-center mr-2 rounded-full text-sm w-8">
         {% if user.avatar %}
           <img class="crop-heptagon bg-white" src="{{ user.avatar | thumbnail_url('sm') }}" alt="">
         {% else %}
-          {# TODO: Need to add the letters as a name #}
+          {{ user.initials() }}
         {% endif %}
       </span>
       <span class="text-xs">
