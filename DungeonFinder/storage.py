@@ -13,6 +13,7 @@ class S3PublicStorage(S3Boto3Storage):
         s3_settings.update(
             bucket_name=settings.AWS_PUBLIC_BUCKET_NAME,
             object_parameters={'CacheControl': 'max-age=86400'},
+            custom_domain='%s.s3.amazonaws.com' % settings.AWS_PUBLIC_BUCKET_NAME,
         )
         super().__init__(**s3_settings)
 

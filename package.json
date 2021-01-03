@@ -26,7 +26,7 @@
     "webpack-cli": "^4.2.0"
   },
   "scripts": {
-    "main": "webpack --config webpack.config.js",
+    "main": "webpack --config webpack.config.js --mode production",
     "main-watch": "yarn run main --watch --output-filename [name].js --mode development"
   },
   "devDependencies": {
