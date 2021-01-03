@@ -61,10 +61,13 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return f'{self.screen_name}'
+        return self.screen_name
 
     def get_absolute_url(self):
         return reverse('profile')
+
+    def get_profile_url(self):
+        return reverse('player-profile', kwargs={'screen_name': self.screen_name})
 
     def initials(self):
         return f'{self.first_name[0]}{self.last_name[0]}'
@@ -106,6 +109,7 @@ class GameMaster(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='gamemaster')
 
     def __str__(self):
-        if self.user.screen_name:
-            return self.user.screen_name
-        return f'{self.user.first_name} {self.user.last_name[0]}'
+        return self.user.screen_name
+
+    def get_profile_url(self):
+        return reverse('gm-profile', kwargs={'screen_name': self.user.screen_name})

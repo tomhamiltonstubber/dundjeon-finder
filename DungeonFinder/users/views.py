@@ -15,10 +15,10 @@ from django.urls import reverse
 from django.views.generic import DetailView, TemplateView
 from pytz import utc
 
-from DungeonFinder.common.views import DFEditView, DFFormView, generate_random_key
+from DungeonFinder.common.views import DFEditView, DFFormView, DFView, generate_random_key
 from DungeonFinder.messaging.emails import EmailRecipient, EmailTemplate, UserEmail, send_email
 from DungeonFinder.users.forms import UserProfileForm, UserSignupForm, UserUpdateThemeForm
-from DungeonFinder.users.models import User
+from DungeonFinder.users.models import GameMaster, User
 
 
 class GMRequestMixin:
@@ -152,9 +152,9 @@ class GMProfileUpdate:
 
 
 class UserUpdateTheme(LoginRequiredMixin, DFFormView):
-    model = User  # The model that will be edited
-    form_class = UserUpdateThemeForm  # The form that we'll insert into the template and validate with
-    template_name = 'users/themes.jinja'  # Your bit
+    model = User
+    form_class = UserUpdateThemeForm
+    template_name = 'users/themes.jinja'
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -168,3 +168,29 @@ class UserUpdateTheme(LoginRequiredMixin, DFFormView):
 
 
 user_update_theme = UserUpdateTheme.as_view()
+
+
+class PlayerProfile(DFView, DetailView):
+    model = User
+    context_object_name = 'player'
+    template_name = 'users/player-profile.jinja'
+    slug_field = slug_url_kwarg = 'screen_name'
+
+    def get_meta_title(self):
+        return self.get_object().screen_name
+
+
+player_profile = PlayerProfile.as_view()
+
+
+class GameMasterProfile(DFView, DetailView):
+    model = GameMaster
+    template_name = 'users/gm-profile.jinja'
+    slug_field = 'user__screen_name'
+    slug_url_kwarg = 'screen_name'
+
+    def get_meta_title(self):
+        return self.get_object().user.screen_name
+
+
+gm_profile = GameMasterProfile.as_view()
