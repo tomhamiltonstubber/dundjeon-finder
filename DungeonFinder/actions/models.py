@@ -9,6 +9,8 @@ from DungeonFinder.users.models import User
 
 
 class Action(models.Model):
+    ACTION_SIGNUP = 1
+    ACTION_EDIT_PROFILE = 5
     ACTION_LOGIN = 10
     ACTION_LOGOUT = 11
     ACTION_JOIN_GAME = 20

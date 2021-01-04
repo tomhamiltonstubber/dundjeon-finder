@@ -1,11 +1,10 @@
-from django.contrib.auth.views import LogoutView
 from django.urls import path
 
 from DungeonFinder.users import views
 
 urlpatterns = [
     path('login/', views.login, name='login'),
-    path('logout/', LogoutView.as_view(template_name='base.jinja'), name='logout'),
+    path('logout/', views.logout, name='logout'),
     path('profile/', views.user_profile, name='profile'),
     path('profile/edit/', views.edit_profile, name='profile-edit'),
     path('player/<str:screen_name>/', views.player_profile, name='player-profile'),

@@ -5,6 +5,8 @@ import random
 from django.shortcuts import render
 from django.views.generic import CreateView, FormView, TemplateView, UpdateView
 
+from DungeonFinder.actions.models import record_action
+
 
 class DFView:
     meta_title = None
@@ -28,11 +30,25 @@ class FormRequestMixin:
         return kwargs
 
 
-class DFCreateView(FormRequestMixin, DFView, CreateView):
+class _DFModelFormView(FormRequestMixin, DFView):
+    action = None
+    request = None
+
+    def record_action(self):
+        if self.action:
+            record_action(self.request.user, self.action)
+
+    def form_valid(self, form):
+        r = super().form_valid(form)
+        self.record_action()
+        return r
+
+
+class DFCreateView(_DFModelFormView, CreateView):
     pass
 
 
-class DFEditView(FormRequestMixin, DFView, UpdateView):
+class DFEditView(_DFModelFormView, UpdateView):
     pass
 
 

@@ -1,9 +1,9 @@
 from django.contrib import messages
-from django.contrib.auth import login as dj_login
+from django.contrib.auth import login as dj_login, logout as dj_logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
@@ -46,6 +46,18 @@ class Login(LoginView):
 
 
 login = Login.as_view()
+
+
+class Logout(LogoutView):
+    template_name = 'base.jinja'
+
+    def dispatch(self, request, *args, **kwargs):
+        record_action(request.user, Action.ACTION_LOGOUT)
+        dj_logout(request)
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+logout = Logout.as_view()
 
 
 class SignupPending(TemplateView):
@@ -118,16 +130,18 @@ def signup_confirm(request, key):
     else:
         dj_login(request, user)
         messages.success(request, 'Account successfully created.')
+        record_action(user, Action.ACTION_SIGNUP)
         return redirect(data.get('next') or '/')
 
 
 class UserUpdateProfile(LoginRequiredMixin, DFEditView):
     model = User
     form_class = UserProfileForm
-    form_title = "Edit Profile"
-    button_label = "Update Profile"
+    form_title = 'Edit Profile'
+    button_label = 'Update Profile'
     template_name = 'def-form.jinja'
     success_url = reverse_lazy('dashboard')
+    action = Action.ACTION_EDIT_PROFILE
 
     def get_object(self, queryset=None):
         return self.request.user
