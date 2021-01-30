@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 
+from DungeonFinder.actions.models import Action, record_action
 from DungeonFinder.common.forms import DFModelForm
 from DungeonFinder.common.views import DFCreateView, DFEditView
 from DungeonFinder.games.forms import CampaignsFilterForm
@@ -156,6 +157,7 @@ def campaign_join(request, pk):
         raise PermissionDenied('You are already part of this game')
     camp.players.add(request.user)
     messages.success(request, "You've joined this game. Have fun!")
+    record_action(request.user, Action.ACTION_JOIN_GAME)
     return redirect(camp.get_absolute_url())
 
 

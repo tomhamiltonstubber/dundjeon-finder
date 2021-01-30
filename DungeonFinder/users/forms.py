@@ -70,3 +70,8 @@ class UserProfileForm(DFModelForm):
     class Meta:
         model = User
         fields = 'first_name', 'last_name', 'screen_name', 'avatar'
+
+    def clean_screen_name(self):
+        if User.objects.filter(screen_name__iexact=self.cleaned_data['screen_name']).exists():
+            raise forms.ValidationError('A user with that screen name already exists')
+        return self.cleaned_data['screen_name']

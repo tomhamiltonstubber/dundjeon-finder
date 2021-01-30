@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.urls import reverse, reverse_lazy
 from pytz import utc
 
+from DungeonFinder.actions.models import Action
 from DungeonFinder.common.test_helpers import AuthenticatedClient
 from DungeonFinder.games.factories.games import CampaignFactory
 from DungeonFinder.games.models import Campaign
@@ -250,12 +251,17 @@ class CampJoinTestCase(TestCase):
     def test_join_game(self):
         r = self.client.post(self.url)
         self.assertRedirects(r, self.campaign.get_absolute_url())
+        assert self.campaign.players.get() == self.client.user
+        action = Action.objects.get(verb=Action.ACTION_JOIN_GAME)
+        assert action.actor == action.target_user == self.client.user
+        assert action.target_campaign == self.campaign
 
     def test_join_unavailable_game(self):
         self.campaign.accepting_players = False
         self.campaign.save()
         r = self.client.post(self.url)
         assert r.status_code == 404
+        assert not Action.objects.exists()
 
     def test_join_full_game(self):
         self.campaign.players.add(UserFactory())
@@ -268,3 +274,7 @@ class CampJoinTestCase(TestCase):
         self.campaign.players.add(self.client.user)
         r = self.client.post(self.url)
         assert r.status_code == 403
+
+
+class CampLeaveTestCase(TestCase):
+    pass

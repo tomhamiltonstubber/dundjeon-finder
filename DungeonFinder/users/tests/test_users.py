@@ -11,6 +11,7 @@ from django.test import Client, TestCase, TransactionTestCase, override_settings
 from django.urls import reverse
 from pytz import utc
 
+from DungeonFinder.actions.models import Action
 from DungeonFinder.common.test_helpers import AuthenticatedClient
 from DungeonFinder.users.factories.users import GameMasterFactory, UserFactory
 from DungeonFinder.users.models import User
@@ -38,7 +39,11 @@ class UserAuthTestCase(TestCase):
         self.assertRedirects(r, '/')
         self.assertContains(r, 'Sign out')
         self.assertNotContains(r, 'Login')
-        assert User.objects.get(id=user.id).last_logged_in.date() == dt.now().date()
+        user = User.objects.get(id=user.id)
+        assert user.last_logged_in.date() == dt.now().date()
+        action = Action.objects.get()
+        assert action.action_type == Action.ACTION_LOGIN
+        assert action.actor == action.target_user == user
 
     def test_logout(self):
         client = AuthenticatedClient()
@@ -48,6 +53,7 @@ class UserAuthTestCase(TestCase):
         r = client.post(reverse('logout'), follow=True)
         self.assertNotContains(r, 'Sign out')
         self.assertRedirects(r, '/')
+        assert Action.objects.get(action_type=Action.ACTION_LOGOUT).actor == client.user
 
 
 @override_settings(RECAPTCHA_TESTING=True)
@@ -85,6 +91,7 @@ class UserSignupTestCase(TransactionTestCase):
             'last_name': 'Player',
             'screen_name': 'FooPlayer1',
         }
+        assert not Action.objects.exists()
 
     @patch('captcha.fields.client.submit')
     def test_user_signup_wrong_password(self, mock_cap):
@@ -117,9 +124,11 @@ class UserSignupTestCase(TransactionTestCase):
             },
         )
         self.assertContains(r, 'too common')
+        assert not Action.objects.exists()
 
     def test_user_signup_logged_in(self):
-        r = AuthenticatedClient().get(self.signup_url)
+        cli = AuthenticatedClient()
+        r = cli.get(self.signup_url)
         self.assertRedirects(r, reverse('dashboard'))
 
     @patch('captcha.fields.client.submit')
@@ -190,6 +199,8 @@ class UserSignupTestCase(TransactionTestCase):
         assert user.first_name == 'New'
         assert user.last_name == 'Player'
         assert user.screen_name == 'FooPlayer1'
+        action = Action.objects.get(action_type=Action.ACTION_SIGNUP)
+        assert action.target_user == action.actory == User.objects.get()
 
     @patch('captcha.fields.client.submit')
     def test_user_confirm_duplicate_screen_name(self, mock_cap):
@@ -250,7 +261,7 @@ class UserSignupTestCase(TransactionTestCase):
 
 class UserFormTest(TestCase):
     def setUp(self):
-        self.user = UserFactory(last_name='Bar')
+        self.user = UserFactory(screen_name='Kazooey')
         self.client = AuthenticatedClient(user=self.user)
         self.rurl = reverse('profile-edit')
 
@@ -262,17 +273,20 @@ class UserFormTest(TestCase):
         return temp_image
 
     def test_edit_profile(self):
-        r = self.client.get(reverse('profile'))
-        self.assertContains(r, 'Bar')
-        self.assertNotContains(r, 'Foo')
+        r = self.client.get(reverse('dashboard'))
+        self.assertContains(r, 'Kazooey')
+        self.assertNotContains(r, 'Banjo')
         r = self.client.get(self.rurl)
-        self.assertContains(r, 'Bar')
+        self.assertContains(r, 'Kazooey')
+        self.assertNotContains(r, 'Banjo')
         r = self.client.post(self.rurl, {'screen_name': 'Banjo', 'last_name': 'Foo', 'first_name': 'test'}, follow=True)
         self.assertRedirects(r, reverse('dashboard'))
-        r = self.client.get(reverse('profile'))
-        self.assertContains(r, 'Foo')
-        self.assertNotContains(r, 'Bar')
-        assert User.objects.get(pk=self.user.pk).last_name == 'Foo'
+        self.assertContains(r, 'Banjo')
+        self.assertNotContains(r, 'Kazooey')
+        assert User.objects.get(pk=self.user.pk).screen_name == 'Banjo'
+        assert Action.objects.count() == 1
+        action = Action.objects.get(action_type=Action.ACTION_EDIT_PROFILE)
+        assert action.target_user == action.actor == User.objects.get()
 
     def test_add_avatar(self):
         img = File(self._get_temp_image('300x300', file_type='png'), name='test.png')
